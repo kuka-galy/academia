@@ -9,10 +9,8 @@ router.post('/register', (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: "Faltan datos obligatorios (Email y Contraseña)" });
   }
-
   const finalName = name ? name.trim() : "Usuario Nuevo";
   const finalRole = (role === 'admin' || role === 'user') ? role : 'user';
-
   db.run(
     `INSERT INTO users (email, password, role, name) VALUES (?, ?, ?, ?)`,
     [email, password, finalRole, finalName],
