@@ -11,6 +11,7 @@
             --success: #10b981;
             --danger: #ef4444;
             --dark-sidebar: #0f172a;
+            --user-sidebar: #2e7d32;
             --text-muted: #64748b;
             --bg-gradient-start: #e8f5e9; 
             --bg-gradient-middle: #f1f8e9;
@@ -21,29 +22,33 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+        }
 
         body { 
             font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, 
-                var(--bg-gradient-start) 0%, 
-                var(--bg-gradient-middle) 35%, 
-                var(--bg-body) 70%
-            );
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-middle) 35%, var(--bg-body) 70%);
             background-attachment: fixed;
             display: flex; 
             min-height: 100vh; 
             color: #1e293b; 
         }
 
-        /* SIDEBAR */
         .sidebar { 
             width: 260px;
             background-color: var(--dark-sidebar); 
             color: white; 
             position: fixed; 
             height: 100vh; 
-            z-index: 1000; 
+            z-index: 1000;
+            display: flex;
+            flex-direction: column; 
+        }
+
+        .sidebar-menu { 
+            flex-grow: 1; 
         }
 
         .sidebar-header { 
@@ -76,11 +81,10 @@
             border-left: 4px solid #4caf50; 
         }
 
-        /* MAIN CONTENT */
         .main-content { 
             margin-left: 260px; 
             flex-grow: 1; 
-            padding: 40px; 
+            padding: 40px 20px; 
             width: calc(100% - 260px); 
         }
 
@@ -98,46 +102,102 @@
             margin-bottom: 30px; 
         }
 
-        /* STAT CARDS */
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
             gap: 20px;
-            margin-bottom: 40px;       
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .stat-card { 
-            background: white; 
-            padding: 24px; 
-            border-radius: var(--radius-lg); 
-            box-shadow: var(--shadow); 
-            border: 1px solid #f1f5f9; 
-        }
-
-        .stat-card small { 
+        .stat-card small, .stat-card p { 
             color: var(--text-muted); 
             font-weight: 600; 
             text-transform: uppercase; 
             font-size: 0.7rem; 
             letter-spacing: 0.5px; 
+            margin-bottom: 8px;
+            display: block;
         }
 
         .stat-card h2 { 
             font-size: 2rem; 
             color: #0f172a; 
-            margin-top: 8px; 
+            margin: 0; 
             font-weight: 800; 
         }
-        /* GLASS PANELS */
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-info small {
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .stat-info h2 {
+            font-size: 1.8rem;
+            color: #0f172a;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        @keyframes pulse {
+            0% { 
+                transform: scale(0.95); 
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); 
+            }
+        
+            70% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); 
+            }
+
+            100% { 
+                transform: scale(0.95); 
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); 
+            }
+        }
+
         .glass-panel { 
             background: var(--white); 
             backdrop-filter: blur(10px);
             border-radius: var(--radius-lg); 
-            padding: 30px; 
+            padding: 25px; 
             box-shadow: var(--shadow); 
             margin-bottom: 30px; 
-            border: 1px solid rgba(255, 255, 255, 0.7); 
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            width: 100%; 
         }
+
         .panel-title { 
             font-size: 1.25rem; 
             font-weight: 700; 
@@ -146,7 +206,6 @@
             color: #0f172a; 
         }
 
-        /* TABLA */
         .table-container { 
             overflow-x: auto; 
         }
@@ -154,49 +213,289 @@
         table { 
             width: 100%; 
             border-collapse: collapse; 
-            margin-top: 10px; 
+            table-layout: fixed;
+            background: white;
+        }
+
+        th, td { 
+            padding: 15px; 
+            text-align: left;
+            border-bottom: 1px solid #edf2f7;
+            word-wrap: break-word;
+            vertical-align: middle;
         }
 
         th { 
-            text-align: left; 
-            padding: 15px 20px; 
-            font-size: 0.75rem; 
-            color: var(--text-muted); 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            border-bottom: 2px solid #f1f5f9; 
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
         }
 
-        td { 
-            padding: 18px 20px; 
-            border-bottom: 1px solid #f1f5f9; 
-            font-size: 0.95rem; 
-            vertical-align: middle; 
+        tr:hover { background-color: #f8fafc; }
+
+        th:nth-child(1), td:nth-child(1) { 
+            width: 8%; 
+            text-align: center; 
         }
 
-        tr:hover { 
-            background-color: #f8fafc; 
+        th:nth-child(2), td:nth-child(2) { 
+            width: 18%; 
+            font-size: 0.85rem; 
+        }
+
+        th:nth-child(3), td:nth-child(3) { 
+            width: 12%; 
+            text-align: center; 
+        }
+
+        th:nth-child(4), td:nth-child(4) { 
+            width: 37%; 
+            font-weight: 600;
+            white-space: normal;
+            line-height: 1.4;
         }
 
         .col-acciones { 
+            width: 200px !important;
+            text-align: center !important;
+        }
+
+        #alumnos table { 
+            table-layout: fixed; 
+        }
+
+        #alumnos .th-inscripcion:nth-child(1), 
+        #tabla-inscripciones-body td:nth-child(1) { 
+            width: 20%; 
+            text-align: left; 
+        }
+
+        #alumnos .th-inscripcion:nth-child(2), 
+        #tabla-inscripciones-body td:nth-child(2) { 
+            width: 30%; 
+            text-align: left; 
+        }
+
+        #alumnos .th-inscripcion:nth-child(3), 
+        #tabla-inscripciones-body td:nth-child(3) { 
+            width: 30%; 
+            text-align: left; 
+        }
+
+        #alumnos .th-inscripcion.col-acciones, 
+        #tabla-inscripciones-body td:nth-child(4) { 
+            width: 20%; 
+            text-align: right; 
+            padding-right: 20px !important; 
+        }
+
+        .th-inscripcion {
+            color: var(--text-muted) !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            font-size: 1.05rem !important;
+            padding: 20px 15px !important;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .th-inscripcion:nth-child(1) { 
+            width: 35%; 
+            text-align: left !important; 
+        }
+
+        .th-inscripcion:nth-child(2) { 
+            width: 40%; 
+            text-align: left !important; 
+        }
+        .th-inscripcion.col-acciones { 
+            width: 25%; 
+            text-align: center !important;
+            padding-right: 0 !important;
+        }
+
+        .th-inscripcion:nth-child(1), #tabla-inscripciones-body td:nth-child(1) { 
+            width: 35%; 
+            text-align: left; 
+            font-size: 1.05rem;
+        }
+
+        .th-inscripcion:nth-child(2), #tabla-inscripciones-body td:nth-child(2) { 
+            width: 40%; 
+            text-align: left; 
+            font-size: 1.05rem;
+        }
+
+        .th-inscripcion.col-acciones, #tabla-inscripciones-body .col-acciones { 
+            width: 25%; 
+            text-align: center;
+            padding-left: 60px;
+        }
+
+        #tabla-inscripciones-body td {
+            white-space: nowrap !important;
+            padding: 18px 15px !important;
+            font-size: 1rem;
+        }
+
+        #tabla-inscripciones-body td:nth-child(1) {
+            font-weight: 700;
+            color: #1e293b;
+            text-align: left;
+        }
+
+        #tabla-inscripciones-body td:nth-child(2) {
+            color: var(--primary);
+            font-weight: 600;
+            text-align: left;
+        }
+
+        #tabla-inscripciones-body .col-acciones {
+            width: 25%;
+            text-align: center !important;
+            padding-right: 0 !important;
+        }
+
+        #tabla-inscripciones-body .btn-delete {
+            min-width: 140px;
+            display: inline-block;
+        }
+
+        #seccion-noticias table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #seccion-noticias th:nth-child(1), 
+        #tabla-noticias-body td:nth-child(1) { 
+            width: 60px; 
             text-align: center !important; 
-            width: 250px; 
+        }
+
+        #seccion-noticias th:nth-child(2), 
+        #tabla-noticias-body td:nth-child(2) { 
+            width: 180px; 
+            text-align: left; 
+        }
+
+        #seccion-noticias th:nth-child(3), 
+        #tabla-noticias-body td:nth-child(3) { 
+            width: 130px; 
+            text-align: center !important; 
+        }
+
+        #seccion-noticias th:nth-child(4), 
+        #tabla-noticias-body td:nth-child(4) { 
+            width: auto; 
+            text-align: left !important; 
+        }
+
+        #seccion-noticias th.col-acciones, 
+        #tabla-noticias-body td.col-acciones { 
+            width: 200px; 
+            text-align: center !important; 
+        }
+
+        #tabla-noticias-body td {
+            padding: 15px 10px !important;
+            vertical-align: middle;
+        }
+
+        #tabla-noticias-body td span {
+            display: inline-block;
+        }
+
+        #gestionar-cursos table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #gestionar-cursos th:nth-child(1),
+        #tabla-cursos-body td:nth-child(1) {
+            width: 70px;
+            text-align: center !important;
+        }
+
+        #gestionar-cursos th:nth-child(2),
+        #tabla-cursos-body td:nth-child(2) {
+            width: 200px;
+            text-align: left !important;
+        }
+
+        #gestionar-cursos th:nth-child(3),
+        #tabla-cursos-body td:nth-child(3) {
+            width: auto;
+            text-align: left !important;
+        }
+
+        #gestionar-cursos th.col-acciones,
+        #tabla-cursos-body td.col-acciones {
+            width: 200px !important;
+            text-align: center !important;
+            padding-right: 0 !important;
+        }
+
+        #tabla-cursos-body .btn-group {
+            justify-content: center;
+        }
+
+        #seccion-usuarios table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #seccion-usuarios th:nth-child(1), 
+        #tabla-alumnos-body td:nth-child(1),
+        #tabla-admins-body td:nth-child(1) { 
+            width: 60px; 
+            text-align: center !important; 
+        }
+
+        #seccion-usuarios th:nth-child(2), 
+        #tabla-alumnos-body td:nth-child(2),
+        #tabla-admins-body td:nth-child(2) { 
+            width: 25%; 
+            text-align: left !important; 
+        }
+
+        #seccion-usuarios th:nth-child(3), 
+        #tabla-alumnos-body td:nth-child(3),
+        #tabla-admins-body td:nth-child(3) { 
+            width: auto;
+            text-align: left !important;
+        }
+
+        #seccion-usuarios th.col-acciones, 
+        #tabla-alumnos-body td.col-acciones,
+        #tabla-admins-body td.col-acciones { 
+            width: 150px !important;
+            text-align: center !important;
+            padding-right: 0 !important; 
+        }
+        
+        #seccion-usuarios .btn-delete {
+            width: 100px;
+            margin: 0 auto;
+            display: block;
         }
 
         .btn-group { 
             display: flex; 
             gap: 8px; 
             justify-content: center; 
+            align-items: center;
         }
-        
+
         .btn { 
-            padding: 10px 18px; 
+            padding: 8px 14px; 
             border-radius: var(--radius-md); 
             border: none; 
             cursor: pointer; 
             font-weight: 700; 
             transition: all 0.2s ease; 
-            font-size: 0.85rem; 
+            font-size: 0.75rem;
+            min-width: 80px;
+            text-transform: uppercase;
         }
 
         .btn-modify { 
@@ -215,7 +514,25 @@
             padding: 12px 24px; 
         }
 
-        /* FORMULARIOS Y BUSCADORES */
+        .btn-logout {
+            margin: 20px;
+            padding: 12px;
+            background: var(--danger);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-logout:hover { 
+            opacity: 0.9; 
+        }
+
         .input-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -271,26 +588,51 @@
         <nav class="sidebar-menu">
             <a class="menu-item active" data-target="dashboard" onclick="initDashboard()">🏠 Dashboard</a>
             <a class="menu-item" data-target="gestionar-cursos" onclick="cargarCursos()">📚 Gestionar Cursos</a>
+            <a class="menu-item" data-target="seccion-usuarios" onclick="cargarUsuarios()">👤 Gestionar Usuarios</a>
             <a class="menu-item" data-target="alumnos" onclick="cargarInscripciones()">👥 Inscripciones</a>
-            <a class="menu-item" data-target="seccion-noticias" onclick="cargarNoticias()">📰 Noticias</a>
+            <a class="menu-item" data-target="seccion-noticias" onclick="cargarNoticias()">📰 Noticias y Avisos</a>
         </nav>
+        <button class="btn-logout" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
     </aside>
 
     <main class="main-content">
         <section id="dashboard" class="content-section active">
-            <h1 class="section-header">Resumen de la Academia</h1>
+            <h2 class="section-header">Resumen de la Academia</h2>
+            
             <div class="stats-grid">
                 <div class="stat-card">
-                    <small>Usuarios Registrados</small>
-                    <h2 id="stat-users">0</h2>
+                    <div class="stat-icon" style="background: #dbeafe; color: #2563eb;">👤</div>
+                    <div class="stat-info">
+                        <small>Usuarios Registrados</small>
+                        <h2 id="stat-users">--</h2>
+                    </div>
                 </div>
+
                 <div class="stat-card">
-                    <small>Cursos en Catálogo</small>
-                    <h2 id="stat-cursos">0</h2>
+                    <div class="stat-icon" style="background: #dcfce7; color: #10b981;">📚</div>
+                    <div class="stat-info">
+                        <small>Cursos en Catálogo</small>
+                        <h2 id="stat-cursos">--</h2>
+                    </div>
                 </div>
+
                 <div class="stat-card">
-                    <small>Inscripciones Totales</small>
-                    <h2 id="stat-assigns">0</h2>
+                    <div class="stat-icon" style="background: #fef3c7; color: #d97706;">✍️</div>
+                    <div class="stat-info">
+                        <small>Inscripciones Totales</small>
+                        <h2 id="stat-assigns">--</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-top: 20px;">
+                <span class="panel-title">Estado del Sistema</span>
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 12px; height: 12px; background: #10b981; border-radius: 50%; display: inline-block; animation: pulse 2s infinite;"></span>
+                        <span style="font-size: 0.9rem; font-weight: 600; color: #475569;">Servidor Activo</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-muted);">Base de Datos: <strong style="color: #0f172a;">Conectada</strong></div>
                 </div>
             </div>
         </section>
@@ -313,27 +655,104 @@
                     </div>
                     <div class="input-group">
                         <label>Descripción Detallada</label>
-                        <input type="text" id="cur-desc" required>
+                        <textarea id="cur-desc" required></textarea>
                     </div>
                     <div style="display: flex; gap: 10px;">
-                        <button type="submit" class="btn btn-submit" id="btn-submit-curso">Añadir Curso</button>
+                        <button type="submit" class="btn btn-submit" id="btn-submit-curso">Guardar Curso</button>
                         <button type="button" class="btn" id="btn-cancelar" style="display:none; background:#e2e8f0; color:#475569;" onclick="resetFormulario()">Cancelar</button>
                     </div>
                 </form>
             </div>
             <div class="glass-panel">
-                <span class="panel-title">Lista de Cursos Activos</span>
+                <span class="panel-title">Lista de Cursos Activos</span>                                                 
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th style="width: 80px;">ID</th>
-                                <th>TÍTULO</th>
-                                <th>DESCRIPCIÓN</th>
-                                <th class="col-acciones">ACCIONES</th>
+                                <th class="th-inscripcion">ID</th>
+                                <th class="th-inscripcion">TÍTULO</th>
+                                <th class="th-inscripcion">DESCRIPCIÓN</th>
+                                <th class="th-inscripcion col-acciones">ACCIONES</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-cursos-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="seccion-usuarios" class="content-section">
+            <h1 class="section-header">Gestión de Usuarios y Administradores</h1>
+            
+            <div class="input-grid">
+                <div class="glass-panel" style="border-top: 4px solid var(--user-sidebar);">
+                    <span class="panel-title">Registrar Nuevo Alumno</span>
+                    <form onsubmit="crearUsuario(event, 'user')" autocomplete="off">
+                        <div class="input-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" class="user-nombre" name="full-name-field" required placeholder="Usuario" autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label>Email del Alumno</label>
+                            <input type="email" class="user-email" name="new-user-email" required placeholder="alumno@wowacademy.com" autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label>Contraseña Provisional</label>
+                            <input type="password" class="user-pass" name="new-user-pass" required autocomplete="new-password" placeholder="***********">
+                        </div>
+                        <button type="submit" class="btn btn-submit" style="width:100%">Crear Alumno</button>
+                    </form>
+                </div>
+
+                <div class="glass-panel" style="border-top: 4px solid var(--dark-sidebar);">
+                    <span class="panel-title">Crear Nuevo Administrador</span>
+                    <form onsubmit="crearUsuario(event, 'admin')" autocomplete="off">
+                        <div class="input-group">
+                            <label>Nombre del Administrador</label>
+                            <input type="text" class="user-nombre" name="admin-name-field" required placeholder="Admin" autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label>Email del Administrador</label>
+                            <input type="email" class="user-email" name="new-admin-email" required placeholder="admin@wowacademy.com" autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label>Contraseña de Acceso</label>
+                            <input type="password" class="user-pass" name="new-admin-pass" required autocomplete="new-password" placeholder="***********">
+                        </div>
+                        <button type="submit" class="btn btn-delete" style="width:100%; background: var(--dark-sidebar)">Registrar Admin</button>
+                    </form>
+                </div>
+            </div>
+            <div class="glass-panel" style="margin-top: 30px; border-left: 5px solid var(--user-sidebar);">
+                <span class="panel-title">Gestión de Alumnos</span>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="th-inscripcion">ID</th>
+                                <th class="th-inscripcion">NOMBRE</th>
+                                <th class="th-inscripcion">EMAIL</th>
+                                <th class="th-inscripcion col-acciones">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-alumnos-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-top: 30px; border-left: 5px solid var(--dark-sidebar);">
+                <span class="panel-title">Gestión de Administradores</span>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="th-inscripcion">ID</th>
+                                <th class="th-inscripcion">NOMBRE</th>
+                                <th class="th-inscripcion">EMAIL</th>
+                                <th class="th-inscripcion col-acciones">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-admins-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -376,9 +795,10 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>EMAIL DEL ALUMNO</th>
-                                <th>CURSO ASIGNADO</th>
-                                <th class="col-acciones">ACCIONES</th>
+                                <th class="th-inscripcion">NOMBRE</th> 
+                                <th class="th-inscripcion">EMAIL DEL ALUMNO</th>
+                                <th class="th-inscripcion">CURSO ASIGNADO</th>
+                                <th class="th-inscripcion col-acciones">ACCIONES</th>
                             </tr>
                         </thead>
                         <tbody id="tabla-inscripciones-body"></tbody>
@@ -391,20 +811,51 @@
             <h1 class="section-header">Gestión de Noticias</h1>
             <div class="glass-panel">
                 <span class="panel-title" id="news-form-title">Publicar Nueva Noticia</span>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label>Tipo de Publicación</label>
+                    </div>
+                    <div class="tipo-selector" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button type="button" id="btn-tipo-noticia" class="btn-tipo active" onclick="setTipo('NOTICIA')" 
+                            style="flex: 1; padding: 10px; border-radius: 8px; border: 2px solid #3b82f6; background: #dbeafe; color: #1e40af; cursor: pointer; font-weight: bold;">
+                            📰 NOTICIA
+                        </button>
+                        <button type="button" id="btn-tipo-aviso" class="btn-tipo" onclick="setTipo('AVISO')" 
+                            style="flex: 1; padding: 10px; border-radius: 8px; border: 2px solid #ddd; background: #f8fafc; color: #64748b; cursor: pointer; font-weight: bold;">
+                            ⚠️ AVISO
+                        </button>
+                    </div>
+                    <input type="hidden" id="news-tipo-val" value="NOTICIA"> </div>
                 <form id="form-noticia">
                     <input type="hidden" id="news-id">
+                    
                     <div class="input-group">
                         <label>Título de la Noticia</label>
                         <input type="text" id="news-titulo" required>
                     </div>
+                    
                     <div class="input-group">
                         <label>Contenido / Cuerpo</label>
                         <textarea id="news-contenido" required></textarea>
                     </div>
-                    <div style="display: flex; gap: 10px;">
+
+                    <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
                         <button type="submit" class="btn btn-submit" id="btn-submit-news">Publicar Noticia</button>
-                        <button type="button" class="btn" id="btn-cancelar-news" style="display:none; background:#e2e8f0; color:#475569;" onclick="resetFormNoticia()">Cancelar</button>
+                        
+                        <button type="button" id="btn-importante" class="btn" 
+                                style="background: #e2e8f0; color: #475569; border: 2px solid #cbd5e1; flex-grow: 0; padding: 12px 24px;" 
+                                onclick="toggleImportante()">
+                            📌 Marcar como Importante
+                        </button>
+                        
+                        <button type="button" class="btn" id="btn-cancelar-news" 
+                                style="display:none; background:#e2e8f0; color:#475569;" 
+                                onclick="resetFormNoticia()">
+                            Cancelar
+                        </button>
                     </div>
+
+                    <input type="hidden" id="news-important-val" value="0">
                 </form>
             </div>
             <div class="glass-panel">
@@ -413,12 +864,15 @@
                     <table>
                         <thead>
                             <tr>
-                                <th style="width: 150px;">FECHA</th>
-                                <th>TÍTULO</th>
-                                <th class="col-acciones">ACCIONES</th>
+                                <th class="th-inscripcion">ID</th>
+                                <th class="th-inscripcion">FECHA Y HORA</th>
+                                <th class="th-inscripcion">TIPO</th>
+                                <th class="th-inscripcion">TÍTULO</th>
+                                <th class="th-inscripcion col-acciones">ACCIONES</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-noticias-body"></tbody>
+                        <tbody id="tabla-noticias-body">
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -435,15 +889,27 @@
                 document.getElementById(item.dataset.target).classList.add('active');
             });
         });
-
         async function initDashboard() {
             try {
                 const res = await fetch('/api/admin/stats');
+                
+                if (!res.ok) {
+                    console.error("Error al obtener estadísticas del servidor");
+                    return;
+                }
+
                 const stats = await res.json();
-                document.getElementById('stat-users').innerText = stats.totalUsers || 0;
-                document.getElementById('stat-cursos').innerText = stats.totalCourses || 0;
-                document.getElementById('stat-assigns').innerText = stats.totalAssignments || 0;
-            } catch (e) { console.error(e); }
+                const userEl = document.getElementById('stat-users');
+                const cursoEl = document.getElementById('stat-cursos');
+                const assignsEl = document.getElementById('stat-assigns');
+
+                if (userEl) userEl.innerText = stats.totalUsers || 0;
+                if (cursoEl) cursoEl.innerText = stats.totalCourses || 0;
+                if (assignsEl) assignsEl.innerText = stats.totalAssignments || 0;
+
+            } catch (e) {
+                console.error("Fallo de conexión:", e);
+            }
         }
 
         // --- CURSOS ---
@@ -451,21 +917,117 @@
             const res = await fetch('/api/cursos?limit=100');
             const data = await res.json();
             const tbody = document.getElementById('tabla-cursos-body');
+            
             tbody.innerHTML = (data.data || []).map(c => `
                 <tr>
                     <td>${c.id}</td>
                     <td><strong>${c.titulo}</strong></td>
                     <td>${c.descripcion}</td>
-                    <td class="col-acciones">
-                        <div class="btn-group">
-                            <button class="btn btn-modify" onclick='prepararEdicion(${JSON.stringify(c)})'>Editar</button>
-                            <button class="btn btn-delete" onclick="eliminarCurso(${c.id})">Borrar</button>
+                    <td class="col-acciones"> <div class="btn-group">
+                            <button class="btn btn-modify" onclick='prepararEdicion(${JSON.stringify(c)})'>EDITAR</button>
+                            <button class="btn btn-delete" onclick="eliminarCurso(${c.id})">BORRAR</button>
                         </div>
                     </td>
                 </tr>
             `).join('');
         }
+        // --- USUARIOS ---
+        async function cargarUsuarios() {
+            try {
+                const res = await fetch('/api/users/with-courses');
+                const usuarios = await res.json();
+                
+                const tbodyAlumnos = document.getElementById('tabla-alumnos-body');
+                const tbodyAdmins = document.getElementById('tabla-admins-body');
+                
+                tbodyAlumnos.innerHTML = "";
+                tbodyAdmins.innerHTML = "";
 
+                usuarios.forEach(u => {
+                    const nombreParaMostrar = u.name || "Sin Nombre";
+                    
+                    const rowHtml = `
+                        <tr>
+                            <td>${u.id}</td>
+                            <td><strong>${nombreParaMostrar}</strong></td>
+                            <td>${u.email}</td>
+                            <td class="col-acciones"> <button class="btn btn-delete" onclick="eliminarUsuario(${u.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+
+                    if (u.role === 'admin') {
+                        tbodyAdmins.innerHTML += rowHtml;
+                    } else {
+                        tbodyAlumnos.innerHTML += rowHtml;
+                    }
+                });
+
+                if (!tbodyAlumnos.innerHTML) tbodyAlumnos.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay alumnos</td></tr>';
+                if (!tbodyAdmins.innerHTML) tbodyAdmins.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay administradores</td></tr>';
+
+            } catch (e) {
+                console.error("Error al cargar las tablas de usuarios:", e);
+            }
+        }
+        async function eliminarUsuario(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/users/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Usuario eliminado correctamente');
+                    if (typeof cargarAlumnos === 'function') {
+                        cargarAlumnos();
+                    }
+                } else {
+                    alert('Error: ' + (data.error || 'No se pudo eliminar el usuario'));
+                }
+            } catch (error) {
+                console.error('Error en la petición DELETE:', error);
+                alert('Error de conexión con el servidor');
+            }
+        }
+        async function crearUsuario(event, role) {
+            event.preventDefault();
+
+            const form = event.target;
+            const email = form.querySelector('.user-email').value;
+            const password = form.querySelector('.user-pass').value;
+
+            try {
+                const response = await fetch('/api/users/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, role })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`${role === 'admin' ? 'Administrador' : 'Alumno'} creado con éxito`);
+                    form.reset();
+                    cargarUsuarios();
+                    if (window.initDashboard) initDashboard();
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error en el registro:", error);
+                alert("Error de conexión con el servidor");
+            }
+
+        }
         // --- INSCRIPCIONES Y BÚSQUEDA ---
         async function cargarInscripciones() {
             try {
@@ -494,15 +1056,16 @@
             globalInscripciones.forEach(usuario => {
                 if (usuario.courses && usuario.courses.length > 0) {
                     usuario.courses.forEach(curso => {
+                        const nombreMostrar = usuario.name || "Sin nombre";
                         const matchEmail = usuario.email.toLowerCase().includes(valAlumno);
                         const matchCurso = curso.titulo.toLowerCase().includes(valCurso);
 
                         if (matchEmail && matchCurso) {
                             html += `
                                 <tr>
-                                    <td><strong>${usuario.email}</strong></td>
-                                    <td><span style="color:var(--primary); font-weight:600;">${curso.titulo}</span></td>
-                                    <td class="col-acciones">
+                                    <td>${nombreMostrar}</td> <td><strong>${usuario.email}</strong></td>
+                                    <td><span style="color: var(--primary); font-weight:600;">${curso.titulo}</span></td>
+                                    <td class="col-acciones"> 
                                         <button class="btn btn-delete" onclick="quitarInscripcion(${usuario.id}, ${curso.id})">Dar de Baja</button>
                                     </td>
                                 </tr>
@@ -512,7 +1075,7 @@
                 }
             });
 
-            tbody.innerHTML = html || '<tr><td colspan="3" style="text-align:center;">No se encontraron inscripciones</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="4" style="text-align:center;">No se encontraron inscripciones</td></tr>';
         }
 
         document.getElementById('form-asignar').addEventListener('submit', async (e) => {
@@ -553,53 +1116,131 @@
 
         // --- NOTICIAS ---
         async function cargarNoticias() {
-            const res = await fetch('/api/news');
-            const noticias = await res.json();
-            const tbody = document.getElementById('tabla-noticias-body');
-            tbody.innerHTML = noticias.map(n => `
-                <tr>
-                    <td>${new Date(n.fecha).toLocaleDateString()}</td>
-                    <td><strong>${n.titulo}</strong></td>
-                    <td class="col-acciones">
-                        <div class="btn-group">
-                            <button class="btn btn-modify" onclick='prepararEdicionNoticia(${JSON.stringify(n)})'>Editar</button>
-                            <button class="btn btn-delete" onclick="eliminarNoticia(${n.id})">Borrar</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
+            try {
+                const res = await fetch('/api/news');
+                const response = await res.json();
+                const noticias = response.data || []; 
+                const tbody = document.getElementById('tabla-noticias-body');
+                
+                tbody.innerHTML = '';
 
-        function prepararEdicion(c) {
-            document.getElementById('form-title').innerText = "Editando Curso: " + c.id;
-            document.getElementById('cur-id').value = c.id;
-            document.getElementById('cur-titulo').value = c.titulo;
-            document.getElementById('cur-desc').value = c.descripcion;
-            document.getElementById('btn-cancelar').style.display = "inline";
-            window.scrollTo(0,0);
+                if (noticias.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay noticias publicadas</td></tr>';
+                    return;
+                }
+
+                noticias.forEach(n => {
+                    const fechaYHora = n.fecha ? new Date(n.fecha).toLocaleString() : '---';
+                    const isAviso = n.tipo === 'AVISO';
+                    const badgeStyle = isAviso 
+                        ? "background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b;" 
+                        : "background-color: #dbeafe; color: #1e40af; border: 1px solid #3b82f6;";
+                    const icon = isAviso ? "⚠️" : "📰";
+
+                    const badgeImportante = n.important === 1 
+                        ? `<span style="background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: 800; margin-left: 12px; display: inline-block; vertical-align: middle;">🔥 IMPORTANTE</span>` 
+                        : '';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${n.id}</td> 
+                        <td>${fechaYHora}</td>
+                        <td>
+                            <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.7em; font-weight: 800; ${badgeStyle}">
+                                ${icon} ${n.tipo}
+                            </span>
+                        </td>
+                        <td>
+                            <strong style="vertical-align: middle;">${n.titulo}</strong>${badgeImportante}
+                        </td>
+                        <td class="col-acciones">
+                            <div class="btn-group">
+                                <button class="btn btn-modify" onclick='prepararEdicionNoticia(${JSON.stringify(n)})'>EDITAR</button>
+                                <button class="btn btn-delete" onclick="eliminarNoticia(${n.id})">BORRAR</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                console.error("Error cargando tabla:", e);
+            }
+        }
+        function prepararEdicionNoticia(n) {
+            document.getElementById('news-id').value = n.id;
+            document.getElementById('news-titulo').value = n.titulo;
+            document.getElementById('news-contenido').value = n.contenido;
+            
+            setTipo(n.tipo); 
+
+            const impInput = document.getElementById('news-important-val');
+            impInput.value = n.important;
+            
+            const btnImp = document.getElementById('btn-importante');
+            if (n.important == 1) {
+                btnImp.style.backgroundColor = "#fee2e2";
+                btnImp.style.color = "#b91c1c";
+                btnImp.innerText = "🔥 ¡ES IMPORTANTE!";
+            } else {
+                btnImp.style.backgroundColor = "#e2e8f0";
+                btnImp.style.color = "#475569";
+                btnImp.innerText = "📌 Marcar como Importante";
+            }
+
+            document.getElementById('btn-cancelar-news').style.display = "inline";
+            document.getElementById('btn-submit-news').innerText = "Actualizar Noticia";
+            document.getElementById('news-form-title').innerText = "Editando Noticia: " + n.id;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function resetFormulario() {
             document.getElementById('form-curso').reset();
             document.getElementById('cur-id').value = "";
             document.getElementById('btn-cancelar').style.display = "none";
+            document.getElementById('btn-submit-curso').innerText = "Añadir Curso";
             document.getElementById('form-title').innerText = "Crear Nuevo Curso";
         }
 
         document.getElementById('form-curso').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
             const id = document.getElementById('cur-id').value;
+            const titulo = document.getElementById('cur-titulo').value;
+            const descripcion = document.getElementById('cur-desc').value;
+            const imagen = document.getElementById('cur-imagen').value;
             const body = { 
-                titulo: document.getElementById('cur-titulo').value, 
-                descripcion: document.getElementById('cur-desc').value,
-                imagen: document.getElementById('cur-imagen').value 
+                titulo: titulo, 
+                descripcion: descripcion,
+                imagen: imagen || ""
             };
-            const method = id ? 'PUT' : 'POST';
-            const url = id ? `/api/cursos/${id}` : '/api/cursos';
-            await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-            resetFormulario(); cargarCursos(); initDashboard();
-        });
 
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/api/cursos/${id}` : '/api/cursos';
+                try {
+                const response = await fetch(url, { 
+                    method: method, 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }, 
+                    body: JSON.stringify(body) 
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(id ? "Curso actualizado con éxito" : "Curso creado con éxito");
+                    resetFormulario();
+                    await cargarCursos();
+                    await initDashboard();
+                } else {
+                    alert("Error: " + (result.error || "No se pudo guardar el curso"));
+                }
+            } catch (error) {
+                console.error("Error en la petición:", error);
+                alert("Error de conexión con el servidor");
+            }
+        });
         async function eliminarCurso(id) {
             if(confirm("¿Borrar curso?")) {
                 await fetch(`/api/cursos/${id}`, { method: 'DELETE' });
@@ -619,22 +1260,114 @@
             document.getElementById('form-noticia').reset();
             document.getElementById('news-id').value = "";
             document.getElementById('btn-cancelar-news').style.display = "none";
+            document.getElementById('btn-submit-news').innerText = "Publicar Noticia";
+            document.getElementById('news-form-title').innerText = "Publicar Nueva Noticia";
+            
+            const inputImp = document.getElementById('news-important-val');
+            inputImp.value = "0";
+            const btnImp = document.getElementById('btn-importante');
+            btnImp.style.backgroundColor = "#e2e8f0";
+            btnImp.style.color = "#475569";
+            btnImp.innerText = "📌 Marcar como Importante";
+            
+            setTipo('NOTICIA');
         }
 
         document.getElementById('form-noticia').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
             const id = document.getElementById('news-id').value;
-            const body = { titulo: document.getElementById('news-titulo').value, contenido: document.getElementById('news-contenido').value };
+            const titulo = document.getElementById('news-titulo').value;
+            const contenido = document.getElementById('news-contenido').value;
+            const tipo = document.getElementById('news-tipo-val').value; 
+            const important = parseInt(document.getElementById('news-important-val').value) || 0;
+
+            const body = { titulo, contenido, tipo, important };
             const method = id ? 'PUT' : 'POST';
             const url = id ? `/api/news/${id}` : '/api/news';
-            await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-            resetFormNoticia(); cargarNoticias();
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (res.ok) {
+                    alert(id ? "Noticia actualizada" : "Noticia publicada");
+                    resetFormNoticia();
+                    cargarNoticias();
+                } else {
+                    const errData = await res.json();
+                    alert("Error: " + errData.error);
+                }
+            } catch (error) {
+                console.error("Error en la petición:", error);
+            }
         });
 
         async function eliminarNoticia(id) {
             if(confirm("¿Borrar noticia?")) {
                 await fetch(`/api/news/${id}`, { method: 'DELETE' });
                 cargarNoticias();
+            }
+        }
+
+        function setTipo(tipo) {
+            const btnNoticia = document.getElementById('btn-tipo-noticia');
+            const btnAviso = document.getElementById('btn-tipo-aviso');
+            const inputTipo = document.getElementById('news-tipo-val');
+
+            inputTipo.value = tipo;
+
+            if (tipo === 'AVISO') {
+                btnAviso.style.borderColor = "#f59e0b";
+                btnAviso.style.backgroundColor = "#fef3c7";
+                btnAviso.style.color = "#92400e";
+                
+                btnNoticia.style.borderColor = "#ddd";
+                btnNoticia.style.backgroundColor = "#f8fafc";
+                btnNoticia.style.color = "#64748b";
+            } else {
+                btnNoticia.style.borderColor = "#3b82f6";
+                btnNoticia.style.backgroundColor = "#dbeafe";
+                btnNoticia.style.color = "#1e40af";
+                
+                btnAviso.style.borderColor = "#ddd";
+                btnAviso.style.backgroundColor = "#f8fafc";
+                btnAviso.style.color = "#64748b";
+            }
+        }
+        function toggleImportante() {
+            const btn = document.getElementById('btn-importante');
+            const input = document.getElementById('news-important-val');
+            
+            if (input.value === "0") {
+                input.value = "1";
+                btn.style.backgroundColor = "#fee2e2";
+                btn.style.color = "#b91c1c";
+                btn.innerText = "🔥 ¡ES IMPORTANTE!";
+            } else {
+                input.value = "0";
+                btn.style.backgroundColor = "#e2e8f0";
+                btn.style.color = "#475569";
+                btn.innerText = "📌 Marcar como Importante";
+            }
+        }
+        // --- CERRAR SESIÓN ---
+        async function cerrarSesion() {
+            if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
+
+            try {
+                const res = await fetch('/api/users/logout', { method: 'POST' });
+                if (res.ok) {
+                    window.location.href = 'index.html';
+                } else {
+                    alert("Error al cerrar sesión");
+                }
+            } catch (e) {
+                console.error("Error:", e);
+                window.location.href = 'index.html';
             }
         }
 

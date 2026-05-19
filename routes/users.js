@@ -4,23 +4,25 @@ const db = require('../database');
 
 // REGISTER
 router.post('/register', (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role, name } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: "Faltan datos" });
+    return res.status(400).json({ error: "Faltan datos obligatorios (Email y Contraseña)" });
   }
-
+  const finalName = name ? name.trim() : "Usuario Nuevo";
+  const finalRole = (role === 'admin' || role === 'user') ? role : 'user';
   db.run(
-    `INSERT INTO users (email, password, role) VALUES (?, ?, ?)`,
-    [email, password, 'user'],
+    `INSERT INTO users (email, password, role, name) VALUES (?, ?, ?, ?)`,
+    [email, password, finalRole, finalName],
     function (err) {
-      if (err) return res.status(500).json({ error: "Error al registrar usuario" });
+      if (err) return res.status(500).json({ error: "Error al registrar usuario en la base de datos" });
 
       res.json({
-        mensaje: "Usuario registrado",
+        mensaje: "Usuario registrado con éxito",
         id: this.lastID,
         email,
-        role: 'user'
+        name: finalName,
+        role: finalRole
       });
     }
   );
