@@ -3,13 +3,15 @@ const router = express.Router();
 const db = require('../database');
 const adminMiddleware = require('./middlewares/admin');
 
-// OBTENER TODAS LAS NOTICIAS CON PAGINACIÓN, BÚSQUEDA Y FILTRO
+// OBTENER TODAS LAS NOTICIAS CON PAGINACIÓN, BÚSQUEDA, FILTRO Y ORDEN
 router.get('/', (req, res) => {
 
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 5;
   const search = req.query.search || "";
   const tipo = req.query.tipo || "";
+  const order = req.query.order === "asc" ? "ASC" : "DESC";
+
   const offset = (page - 1) * limit;
 
   const searchTerm = `%${search}%`;
@@ -35,7 +37,7 @@ router.get('/', (req, res) => {
       SELECT * FROM news
       WHERE (titulo LIKE ? OR contenido LIKE ?)
       AND tipo LIKE ?
-      ORDER BY fecha DESC
+      ORDER BY fecha ${order}
       LIMIT ? OFFSET ?
     `;
 
@@ -52,6 +54,7 @@ router.get('/', (req, res) => {
         totalPages,
         search,
         tipo,
+        order,
         data: rows
       });
 
