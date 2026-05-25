@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel | WoWacademy</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
+    
+    <style>
+        /*1. CONFIGURACIÓN GLOBAL Y VARIABLES DE ENTORNO */
+  
         :root {
             --primary: #2563eb;
             --success: #10b981;
@@ -36,6 +39,7 @@
             color: #1e293b; 
         }
 
+        /* 2. ESTRUCTURA BASE, SIDEBAR Y CONTENEDOR PRINCIPAL */
         .sidebar { 
             width: 260px;
             background-color: var(--dark-sidebar); 
@@ -47,10 +51,6 @@
             flex-direction: column; 
         }
 
-        .sidebar-menu { 
-            flex-grow: 1; 
-        }
-
         .sidebar-header { 
             padding: 30px 24px; 
             font-weight: 800; 
@@ -60,6 +60,10 @@
 
         .sidebar-header span { 
             color: #4caf50; 
+        }
+
+        .sidebar-menu { 
+            flex-grow: 1; 
         }
 
         .menu-item { 
@@ -75,7 +79,8 @@
             font-weight: 600; 
         }
 
-        .menu-item:hover, .menu-item.active { 
+        .menu-item:hover, 
+        .menu-item.active { 
             color: white; 
             background: rgba(255,255,255,0.05); 
             border-left: 4px solid #4caf50; 
@@ -102,6 +107,38 @@
             margin-bottom: 30px; 
         }
 
+        .glass-panel { 
+            background: var(--white); 
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg); 
+            padding: 25px; 
+            box-shadow: var(--shadow); 
+            margin-bottom: 30px; 
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            width: 100%; 
+        }
+
+        .panel-title { 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            margin-bottom: 25px; 
+            display: block; 
+            color: #0f172a; 
+        }
+
+        .panel-header-inline {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .panel-header-inline .panel-title {
+            margin-bottom: 0;
+        }
+
+        /* 3. COMPONENTES DE DASHBOARD / ESTADÍSTICAS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -119,23 +156,6 @@
             align-items: center;
             gap: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .stat-card small, .stat-card p { 
-            color: var(--text-muted); 
-            font-weight: 600; 
-            text-transform: uppercase; 
-            font-size: 0.7rem; 
-            letter-spacing: 0.5px; 
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .stat-card h2 { 
-            font-size: 2rem; 
-            color: #0f172a; 
-            margin: 0; 
-            font-weight: 800; 
         }
 
         .stat-card:hover {
@@ -175,308 +195,73 @@
                 transform: scale(0.95); 
                 box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); 
             }
-        
             70% { 
                 transform: scale(1); 
                 box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); 
             }
-
             100% { 
                 transform: scale(0.95); 
                 box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); 
             }
         }
 
-        .glass-panel { 
-            background: var(--white); 
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius-lg); 
-            padding: 25px; 
-            box-shadow: var(--shadow); 
-            margin-bottom: 30px; 
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            width: 100%; 
+        /* 4. FORMULARIOS, ELEMENTOS DE ENTRADA Y BOTONES GENERALES */
+        .input-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
         }
 
-        .panel-title { 
-            font-size: 1.25rem; 
-            font-weight: 700; 
-            margin-bottom: 25px; 
+        .input-group { 
+            margin-bottom: 20px; 
+            position: relative; 
+        }
+
+        .input-group label { 
             display: block; 
-            color: #0f172a; 
-        }
-
-        .table-container { 
-            overflow-x: auto; 
-        }
-
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            table-layout: fixed;
-            background: white;
-        }
-
-        th, td { 
-            padding: 15px; 
-            text-align: left;
-            border-bottom: 1px solid #edf2f7;
-            word-wrap: break-word;
-            vertical-align: middle;
-        }
-
-        th { 
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-
-        tr:hover { background-color: #f8fafc; }
-
-        th:nth-child(1), td:nth-child(1) { 
-            width: 8%; 
-            text-align: center; 
-        }
-
-        th:nth-child(2), td:nth-child(2) { 
-            width: 18%; 
             font-size: 0.85rem; 
+            font-weight: 700; 
+            margin-bottom: 8px; 
+            color: #334155; 
         }
 
-        th:nth-child(3), td:nth-child(3) { 
-            width: 12%; 
-            text-align: center; 
+        .input-group input, 
+        .input-group select, 
+        .input-group textarea { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border-radius: var(--radius-md); 
+            border: 1px solid #e2e8f0; 
+            background: #ffffff; 
+            font-size: 0.9rem; 
+            font-family: inherit;
         }
 
-        th:nth-child(4), td:nth-child(4) { 
-            width: 37%; 
-            font-weight: 600;
-            white-space: normal;
-            line-height: 1.4;
+        textarea { 
+            min-height: 120px; 
+            resize: vertical; 
         }
 
-        .col-acciones { 
-            width: 200px !important;
-            text-align: center !important;
+        .search-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin-bottom: 20px; 
         }
 
-        #alumnos table { 
-            table-layout: fixed; 
+        .table-search-input {
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            width: 240px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
-        #alumnos .th-inscripcion:nth-child(1), 
-        #tabla-inscripciones-body td:nth-child(1) { 
-            width: 20%; 
-            text-align: left; 
-        }
-
-        #alumnos .th-inscripcion:nth-child(2), 
-        #tabla-inscripciones-body td:nth-child(2) { 
-            width: 30%; 
-            text-align: left; 
-        }
-
-        #alumnos .th-inscripcion:nth-child(3), 
-        #tabla-inscripciones-body td:nth-child(3) { 
-            width: 30%; 
-            text-align: left; 
-        }
-
-        #alumnos .th-inscripcion.col-acciones, 
-        #tabla-inscripciones-body td:nth-child(4) { 
-            width: 20%; 
-            text-align: right; 
-            padding-right: 20px !important; 
-        }
-
-        .th-inscripcion {
-            color: var(--text-muted) !important;
-            font-weight: 700 !important;
-            text-transform: uppercase;
-            font-size: 1.05rem !important;
-            padding: 20px 15px !important;
-            border-bottom: 1px solid #edf2f7;
-        }
-
-        .th-inscripcion:nth-child(1) { 
-            width: 35%; 
-            text-align: left !important; 
-        }
-
-        .th-inscripcion:nth-child(2) { 
-            width: 40%; 
-            text-align: left !important; 
-        }
-        .th-inscripcion.col-acciones { 
-            width: 25%; 
-            text-align: center !important;
-            padding-right: 0 !important;
-        }
-
-        .th-inscripcion:nth-child(1), #tabla-inscripciones-body td:nth-child(1) { 
-            width: 35%; 
-            text-align: left; 
-            font-size: 1.05rem;
-        }
-
-        .th-inscripcion:nth-child(2), #tabla-inscripciones-body td:nth-child(2) { 
-            width: 40%; 
-            text-align: left; 
-            font-size: 1.05rem;
-        }
-
-        .th-inscripcion.col-acciones, #tabla-inscripciones-body .col-acciones { 
-            width: 25%; 
-            text-align: center;
-            padding-left: 60px;
-        }
-
-        #tabla-inscripciones-body td {
-            white-space: nowrap !important;
-            padding: 18px 15px !important;
-            font-size: 1rem;
-        }
-
-        #tabla-inscripciones-body td:nth-child(1) {
-            font-weight: 700;
-            color: #1e293b;
-            text-align: left;
-        }
-
-        #tabla-inscripciones-body td:nth-child(2) {
-            color: var(--primary);
-            font-weight: 600;
-            text-align: left;
-        }
-
-        #tabla-inscripciones-body .col-acciones {
-            width: 25%;
-            text-align: center !important;
-            padding-right: 0 !important;
-        }
-
-        #tabla-inscripciones-body .btn-delete {
-            min-width: 140px;
-            display: inline-block;
-        }
-
-        #seccion-noticias table {
-            table-layout: fixed;
-            width: 100%;
-        }
-
-        #seccion-noticias th:nth-child(1), 
-        #tabla-noticias-body td:nth-child(1) { 
-            width: 60px; 
-            text-align: center !important; 
-        }
-
-        #seccion-noticias th:nth-child(2), 
-        #tabla-noticias-body td:nth-child(2) { 
-            width: 180px; 
-            text-align: left; 
-        }
-
-        #seccion-noticias th:nth-child(3), 
-        #tabla-noticias-body td:nth-child(3) { 
-            width: 130px; 
-            text-align: center !important; 
-        }
-
-        #seccion-noticias th:nth-child(4), 
-        #tabla-noticias-body td:nth-child(4) { 
-            width: auto; 
-            text-align: left !important; 
-        }
-
-        #seccion-noticias th.col-acciones, 
-        #tabla-noticias-body td.col-acciones { 
-            width: 200px; 
-            text-align: center !important; 
-        }
-
-        #tabla-noticias-body td {
-            padding: 15px 10px !important;
-            vertical-align: middle;
-        }
-
-        #tabla-noticias-body td span {
-            display: inline-block;
-        }
-
-        #gestionar-cursos table {
-            table-layout: fixed;
-            width: 100%;
-        }
-
-        #gestionar-cursos th:nth-child(1),
-        #tabla-cursos-body td:nth-child(1) {
-            width: 70px;
-            text-align: center !important;
-        }
-
-        #gestionar-cursos th:nth-child(2),
-        #tabla-cursos-body td:nth-child(2) {
-            width: 200px;
-            text-align: left !important;
-        }
-
-        #gestionar-cursos th:nth-child(3),
-        #tabla-cursos-body td:nth-child(3) {
-            width: auto;
-            text-align: left !important;
-        }
-
-        #gestionar-cursos th.col-acciones,
-        #tabla-cursos-body td.col-acciones {
-            width: 200px !important;
-            text-align: center !important;
-            padding-right: 0 !important;
-        }
-
-        #tabla-cursos-body .btn-group {
-            justify-content: center;
-        }
-
-        #seccion-usuarios table {
-            table-layout: fixed;
-            width: 100%;
-        }
-
-        #seccion-usuarios th:nth-child(1), 
-        #tabla-alumnos-body td:nth-child(1),
-        #tabla-admins-body td:nth-child(1) { 
-            width: 60px; 
-            text-align: center !important; 
-        }
-
-        #seccion-usuarios th:nth-child(2), 
-        #tabla-alumnos-body td:nth-child(2),
-        #tabla-admins-body td:nth-child(2) { 
-            width: 25%; 
-            text-align: left !important; 
-        }
-
-        #seccion-usuarios th:nth-child(3), 
-        #tabla-alumnos-body td:nth-child(3),
-        #tabla-admins-body td:nth-child(3) { 
-            width: auto;
-            text-align: left !important;
-        }
-
-        #seccion-usuarios th.col-acciones, 
-        #tabla-alumnos-body td.col-acciones,
-        #tabla-admins-body td.col-acciones { 
-            width: 150px !important;
-            text-align: center !important;
-            padding-right: 0 !important; 
-        }
-        
-        #seccion-usuarios .btn-delete {
-            width: 100px;
-            margin: 0 auto;
-            display: block;
+        .table-search-input:focus {
+            border-color: var(--primary);
         }
 
         .btn-group { 
@@ -533,52 +318,363 @@
             opacity: 0.9; 
         }
 
-        .input-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
+        .btn-filter {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px solid #ddd;
+            background: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .input-group { 
-            margin-bottom: 20px; 
-            position: relative; 
+        .btn-filter:hover {
+            background: #f8fafc;
         }
 
-        .input-group label { 
-            display: block; 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            margin-bottom: 8px; 
-            color: #334155; 
+        /* 5. DISEÑO DE TABLAS GENERALES */
+        .table-container { 
+            overflow-x: auto; 
         }
 
-        .input-group input, .input-group select, .input-group textarea { 
+        table { 
             width: 100%; 
-            padding: 12px 15px; 
-            border-radius: var(--radius-md); 
-            border: 1px solid #e2e8f0; 
-            background: #ffffff; 
-            font-size: 0.9rem; 
-            font-family: inherit;
+            border-collapse: collapse; 
+            table-layout: fixed;
+            background: white;
         }
 
-        .search-container { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
-            margin-bottom: 20px; 
-        }
-
-        .search-box { 
-            background: #f8fafc; 
+        th, td { 
             padding: 15px; 
-            border-radius: var(--radius-md); 
-            border: 1px solid #e2e8f0; 
+            text-align: left;
+            border-bottom: 1px solid #edf2f7;
+            word-wrap: break-word;
+            vertical-align: middle;
         }
 
-        textarea { 
-            min-height: 120px; 
-            resize: vertical; 
+        th { 
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        tr:hover { 
+            background-color: #f8fafc; 
+        }
+
+        .th-inscripcion {
+            color: var(--text-muted) !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            font-size: 0.85rem !important;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        /* 6. CONFIGURACIÓN DE TABLA DE ALUMNIOS E INSCRIPCIONES (CSS) */
+        #alumnos table { 
+            table-layout: fixed !important; 
+            width: 100% !important; 
+        }
+
+        #alumnos th.th-inscripcion,
+        #tabla-inscripciones-body td {
+            text-align: left !important;
+            padding: 16px 15px !important;
+            font-size: 0.95rem !important;
+            white-space: nowrap !important;
+        }
+
+        #alumnos th.th-inscripcion:nth-child(1), 
+        #tabla-inscripciones-body td:nth-child(1) { 
+            width: 25% !important; 
+        }
+
+        #alumnos th.th-inscripcion:nth-child(2), 
+        #tabla-inscripciones-body td:nth-child(2) { 
+            width: 30% !important; 
+        }
+
+        #alumnos th.th-inscripcion:nth-child(3), 
+        #tabla-inscripciones-body td:nth-child(3) { 
+            width: 25% !important; 
+        }
+
+        #alumnos th.th-inscripcion.col-acciones, 
+        #tabla-inscripciones-body td.col-acciones { 
+            width: 20% !important;
+            text-align: center !important; 
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        #tabla-inscripciones-body td:nth-child(1) {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        #tabla-inscripciones-body td:nth-child(2) {
+            color: #475569;
+            font-weight: 500;
+        }
+
+        #tabla-inscripciones-body td:nth-child(3) {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        #tabla-inscripciones-body .col-acciones-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        #tabla-inscripciones-body .btn-delete {
+            width: 130px !important;
+            min-width: 130px !important;
+            text-align: center;
+            margin: 0 auto !important; 
+        }
+
+        /* 7. CONFIGURACIÓN DE TABLA DE GESTIÓN DE CURSOS */
+        #gestionar-cursos table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #gestionar-cursos th:nth-child(1),
+        #tabla-cursos-body td:nth-child(1) {
+            width: 70px;
+            text-align: center !important;
+        }
+
+        #gestionar-cursos th:nth-child(2),
+        #tabla-cursos-body td:nth-child(2) {
+            width: 200px;
+            text-align: left !important;
+        }
+
+        #gestionar-cursos th:nth-child(3),
+        #tabla-cursos-body td:nth-child(3) {
+            width: auto;
+            text-align: left !important;
+        }
+
+        #gestionar-cursos th.col-acciones,
+        #tabla-cursos-body td.col-acciones {
+            width: 200px !important;
+            text-align: center !important;
+            padding-right: 0 !important;
+        }
+
+        #tabla-cursos-body .btn-group {
+            justify-content: center;
+        }
+
+        /* 8. CONFIGURACIÓN DE TABLA DE GESTIÓN DE USUARIOS */
+        #seccion-usuarios table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #seccion-usuarios th:nth-child(1), 
+        #tabla-alumnos-body td:nth-child(1),
+        #tabla-admins-body td:nth-child(1) { 
+            width: 60px; 
+            text-align: center !important; 
+        }
+
+        #seccion-usuarios th:nth-child(2), 
+        #tabla-alumnos-body td:nth-child(2),
+        #tabla-admins-body td:nth-child(2) { 
+            width: 25%; 
+            text-align: left !important; 
+        }
+
+        #seccion-usuarios th:nth-child(3), 
+        #tabla-alumnos-body td:nth-child(3),
+        #tabla-admins-body td:nth-child(3) { 
+            width: auto;
+            text-align: left !important;
+        }
+
+        #seccion-usuarios th.col-acciones, 
+        #tabla-alumnos-body td.col-acciones,
+        #tabla-admins-body td.col-acciones { 
+            width: 150px !important;
+            text-align: center !important;
+            padding-right: 0 !important; 
+        }
+        
+        #seccion-usuarios .btn-delete {
+            width: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .panel-filters-group {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+            align-items: center;
+        }
+
+        .btn-filter.active#filter-all {
+            background: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
+
+        .btn-filter.active#filter-admin {
+            background: #f1f5f9;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
+        }
+
+        .btn-filter.active#filter-alumno {
+            background: #e8f5e9;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+        }
+
+        /* 9. CONFIGURACIÓN DE TABLA DE NOTICIAS Y AVISOS */
+        #seccion-noticias table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #seccion-noticias th:nth-child(1), 
+        #tabla-noticias-body td:nth-child(1) { 
+            width: 60px; 
+            text-align: center !important; 
+        }
+
+        #seccion-noticias th:nth-child(2), 
+        #tabla-noticias-body td:nth-child(2) { 
+            width: 180px; 
+            text-align: left; 
+        }
+
+        #seccion-noticias th:nth-child(3), 
+        #tabla-noticias-body td:nth-child(3) { 
+            width: 130px; 
+            text-align: center !important; 
+        }
+
+        #seccion-noticias th:nth-child(4), 
+        #tabla-noticias-body td:nth-child(4) { 
+            width: auto; 
+            text-align: left !important; 
+        }
+
+        #seccion-noticias th.col-acciones, 
+        #tabla-noticias-body td.col-acciones { 
+            width: 200px; 
+            text-align: center !important; 
+        }
+
+        #tabla-noticias-body td {
+            padding: 15px 10px !important;
+            vertical-align: middle;
+        }
+
+        #tabla-noticias-body td span {
+            display: inline-block;
+        }
+
+        /* 10. COMPONENTES VISUALES DE MODALES */
+        .modal-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(4px); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .modal-content-custom {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            animation: slideUp 0.2s ease-out;
+        }
+
+        .modal-header-custom {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+        }
+
+        .modal-header-custom h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark-sidebar);
+        }
+
+        .modal-close-custom {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .modal-close-custom:hover {
+            color: var(--danger);
+        }
+
+        .modal-body-custom {
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: #f1f5f9;
+        }
+
+        .curso-card {
+            background: #ffffff;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .curso-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e1;
+        }
+
+        /* Animaciones de modales */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
@@ -664,7 +760,10 @@
                 </form>
             </div>
             <div class="glass-panel">
-                <span class="panel-title">Lista de Cursos Activos</span>                                                 
+                <div class="panel-header-inline">
+                    <span class="panel-title">Lista de Cursos Activos</span>                                                 
+                    <input type="text" class="table-search-input" id="search-cursos" placeholder="🔍 Buscar curso..." onkeyup="buscarEnTabla('tabla-cursos-body', this.value)">
+                </div>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -682,77 +781,72 @@
         </section>
 
         <section id="seccion-usuarios" class="content-section">
-            <h1 class="section-header">Gestión de Usuarios y Administradores</h1>
+            <h1 class="section-header">Gestión de Usuarios</h1>
             
             <div class="input-grid">
                 <div class="glass-panel" style="border-top: 4px solid var(--user-sidebar);">
                     <span class="panel-title">Registrar Nuevo Alumno</span>
-                    <form onsubmit="crearUsuario(event, 'user')" autocomplete="off">
+                    <form id="form-crear-alumno" onsubmit="crearUsuario(event, 'user')" autocomplete="off">
                         <div class="input-group">
                             <label>Nombre Completo</label>
-                            <input type="text" class="user-nombre" name="full-name-field" required placeholder="Usuario" autocomplete="off">
+                            <input type="text" id="alumno-name" required placeholder="Ej. Juan Pérez">
                         </div>
                         <div class="input-group">
                             <label>Email del Alumno</label>
-                            <input type="email" class="user-email" name="new-user-email" required placeholder="alumno@wowacademy.com" autocomplete="off">
+                            <input type="email" id="alumno-email" required placeholder="alumno@wowacademy.com" autocomplete="off">
                         </div>
                         <div class="input-group">
                             <label>Contraseña Provisional</label>
-                            <input type="password" class="user-pass" name="new-user-pass" required autocomplete="new-password" placeholder="***********">
+                            <input type="password" id="alumno-pass" required autocomplete="new-password" placeholder="***********">
                         </div>
-                        <button type="submit" class="btn btn-submit" style="width:100%">Crear Alumno</button>
+                        <button type="submit" class="btn btn-submit" style="width:100%; background-color: var(--user-sidebar);">Crear Alumno</button>
                     </form>
                 </div>
 
                 <div class="glass-panel" style="border-top: 4px solid var(--dark-sidebar);">
                     <span class="panel-title">Crear Nuevo Administrador</span>
-                    <form onsubmit="crearUsuario(event, 'admin')" autocomplete="off">
+                    <form id="form-crear-admin" onsubmit="crearUsuario(event, 'admin')" autocomplete="off">
                         <div class="input-group">
-                            <label>Nombre del Administrador</label>
-                            <input type="text" class="user-nombre" name="admin-name-field" required placeholder="Admin" autocomplete="off">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="admin-name" required placeholder="Ej. Admin Carlos">
                         </div>
                         <div class="input-group">
                             <label>Email del Administrador</label>
-                            <input type="email" class="user-email" name="new-admin-email" required placeholder="admin@wowacademy.com" autocomplete="off">
+                            <input type="email" id="admin-email" required placeholder="admin@wowacademy.com" autocomplete="off">
                         </div>
                         <div class="input-group">
                             <label>Contraseña de Acceso</label>
-                            <input type="password" class="user-pass" name="new-admin-pass" required autocomplete="new-password" placeholder="***********">
+                            <input type="password" id="admin-pass" required autocomplete="new-password" placeholder="***********">
                         </div>
-                        <button type="submit" class="btn btn-delete" style="width:100%; background: var(--dark-sidebar)">Registrar Admin</button>
+                        <button type="submit" class="btn btn-submit" style="width:100%; background-color: var(--dark-sidebar);">Registrar Admin</button>
                     </form>
                 </div>
             </div>
-            <div class="glass-panel" style="margin-top: 30px; border-left: 5px solid var(--user-sidebar);">
-                <span class="panel-title">Gestión de Alumnos</span>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="th-inscripcion">ID</th>
-                                <th class="th-inscripcion">NOMBRE</th>
-                                <th class="th-inscripcion">EMAIL</th>
-                                <th class="th-inscripcion col-acciones">ACCIONES</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla-alumnos-body"></tbody>
-                    </table>
-                </div>
-            </div>
 
-            <div class="glass-panel" style="margin-top: 30px; border-left: 5px solid var(--dark-sidebar);">
-                <span class="panel-title">Gestión de Administradores</span>
+            <div class="glass-panel" style="margin-top: 30px; border-left: 5px solid var(--primary);">
+                <div class="panel-header-inline" style="justify-content: space-between; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <span class="panel-title">Listado Global de Usuarios</span>
+                        <input type="text" class="table-search-input" id="search-usuarios-global" placeholder="🔍 Buscar usuario..." onkeyup="filtrarUsuariosGlobal()">
+                    </div>
+                    <div class="role-filter-container" style="display: flex; gap: 10px;">
+                        <button type="button" class="btn-filter active" id="filter-all" onclick="setFiltroRol('TODOS')">TODOS</button>
+                        <button type="button" class="btn-filter" id="filter-admin" onclick="setFiltroRol('ADMIN')" style="border-color: #cbd5e1; color: #0f172a;">💼 ADMIN</button>
+                        <button type="button" class="btn-filter" id="filter-alumno" onclick="setFiltroRol('ALUMNO')" style="border-color: #c8e6c9; color: #2e7d32;">🎓 ALUMNO</button>
+                    </div>
+                </div>
                 <div class="table-container">
-                    <table>
+                    <table style="table-layout: auto !important; width: 100%;">
                         <thead>
                             <tr>
-                                <th class="th-inscripcion">ID</th>
-                                <th class="th-inscripcion">NOMBRE</th>
-                                <th class="th-inscripcion">EMAIL</th>
-                                <th class="th-inscripcion col-acciones">ACCIONES</th>
+                                <th class="th-inscripcion" style="width: 8%; text-align: center;">ID</th>
+                                <th class="th-inscripcion" style="width: 27%; text-align: left;">NOMBRE</th>
+                                <th class="th-inscripcion" style="width: 35%; text-align: left;">EMAIL</th>
+                                <th class="th-inscripcion" style="width: 15%; text-align: center;">ROL</th>
+                                <th class="th-inscripcion col-acciones" style="width: 15%; text-align: center;">ACCIONES</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-admins-body"></tbody>
+                        <tbody id="tabla-usuarios-unificada-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -795,7 +889,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th class="th-inscripcion">NOMBRE</th> 
+                                <th class="th-inscripcion">NOMBRE</th>
                                 <th class="th-inscripcion">EMAIL DEL ALUMNO</th>
                                 <th class="th-inscripcion">CURSO ASIGNADO</th>
                                 <th class="th-inscripcion col-acciones">ACCIONES</th>
@@ -858,8 +952,21 @@
                     <input type="hidden" id="news-important-val" value="0">
                 </form>
             </div>
+
             <div class="glass-panel">
-                <span class="panel-title">Noticias Publicadas</span>
+                <div class="panel-header-inline">
+                    <span class="panel-title" style="margin-bottom: 0;">Noticias Publicadas</span>
+                    
+                    <input type="text" class="table-search-input" id="search-noticias" placeholder="🔍 Buscar noticia..." onkeyup="filtrarNoticias_Main()">
+                    
+                    <div class="panel-filters-group">
+                        <button type="button" id="btn-news-tipo-todos" class="btn-filter btn-tipo active" onclick="filtrarNoticiasPorTipo('TODAS')" style="padding: 6px 12px; border-radius: 20px; font-weight: 700; cursor: pointer;">TODAS</button>
+                        <button type="button" id="btn-news-tipo-noticia" class="btn-filter btn-tipo" onclick="filtrarNoticiasPorTipo('NOTICIA')" style="padding: 6px 12px; border-radius: 20px; font-weight: 700; cursor: pointer;">📰 NOTICIA</button>
+                        <button type="button" id="btn-news-tipo-aviso" class="btn-filter btn-tipo" onclick="filtrarNoticiasPorTipo('AVISO')" style="padding: 6px 12px; border-radius: 20px; font-weight: 700; cursor: pointer;">⚠️ AVISO</button>
+                        <button type="button" id="filtro-btn-importante" class="btn-filter btn-tipo" onclick="toggleFiltroImportante()" style="padding: 6px 12px; border-radius: 20px; font-weight: 700; cursor: pointer; background: #e2e8f0; color: #475569; border: 1px solid #cbd5e1;">📌 MOSTRAR TODO</button>
+                    </div>
+                </div>
+
                 <div class="table-container">
                     <table>
                         <thead>
@@ -871,32 +978,85 @@
                                 <th class="th-inscripcion col-acciones">ACCIONES</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-noticias-body">
-                            </tbody>
+                        <tbody id="tabla-noticias-body"></tbody>
                     </table>
                 </div>
             </div>
         </section>
     </main>
-    <script>
-        let globalInscripciones = [];
 
-        // Navegación
+    <div id="modal-cursos" class="modal-custom" style="display: none;">
+        <div class="modal-content-custom" style="max-width: 550px;">
+            <div class="modal-header-custom">
+                <h3 id="modal-cursos-titulo" style="margin: 0; font-size: 1.2rem; color: #0f172a;">Cursos del Alumno</h3>
+                <span class="modal-close-custom" onclick="cerrarModalCursos()">&times;</span>
+            </div>
+            <div class="modal-body-custom">
+                <ul id="modal-cursos-lista" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 1. ARRAYS Y VARIABLES DE CONTROL GLOBAL */
+        let globalUsuarios = [];
+        let globalInscripciones = [];
+        let globalNoticias = [];
+        
+        let filtroRolActual = 'TODOS';
+        let filtroNoticiasTipo = 'TODAS';
+        let filtroNoticiasImportante = false;
+
+        /* 2. INICIALIZACIÓN Y NAVEGACIÓN ENTRE SECCIONES */
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.menu-item, .content-section').forEach(el => el.classList.remove('active'));
                 item.classList.add('active');
                 document.getElementById(item.dataset.target).classList.add('active');
+                
+                document.querySelectorAll('.table-search-input').forEach(input => {
+                    input.value = "";
+                    const onkeyupAttr = input.getAttribute('onkeyup');
+                    if (onkeyupAttr) {
+                        const match = onkeyupAttr.match(/'([^']+)'/);
+                        if (match && match[1]) {
+                            buscarEnTabla(match[1], "");
+                        }
+                    }
+                });
+
+                const buscadorGlobal = document.getElementById('search-usuarios-global');
+                if (buscadorGlobal) {
+                    buscadorGlobal.value = "";
+                    if (typeof filtrarUsuariosGlobal === 'function') {
+                        filtrarUsuariosGlobal();
+                    }
+                }
+
+                if (typeof setFiltroRol === 'function') {
+                    setFiltroRol('TODOS');
+                }
+                
+                filtroNoticiasTipo = 'TODAS';
+                filtroNoticiasImportante = false;
+                const bImp = document.getElementById('filtro-btn-importante');
+                if(bImp) {
+                    bImp.style.backgroundColor = "#e2e8f0";
+                    bImp.style.color = "#475569";
+                    bImp.style.borderColor = "#cbd5e1";
+                    bImp.innerText = "📌 MOSTRAR TODO";
+                }
+                actualizarEstilosBotonesTipoNoticias('TODAS');
+                const sNot = document.getElementById('search-noticias');
+                if (sNot) sNot.value = "";
             });
         });
+
         async function initDashboard() {
             try {
                 const res = await fetch('/api/admin/stats');
-                
-                if (!res.ok) {
-                    console.error("Error al obtener estadísticas del servidor");
-                    return;
-                }
+                if (!res.ok) return;
 
                 const stats = await res.json();
                 const userEl = document.getElementById('stat-users');
@@ -906,15 +1066,14 @@
                 if (userEl) userEl.innerText = stats.totalUsers || 0;
                 if (cursoEl) cursoEl.innerText = stats.totalCourses || 0;
                 if (assignsEl) assignsEl.innerText = stats.totalAssignments || 0;
-
             } catch (e) {
                 console.error("Fallo de conexión:", e);
             }
         }
 
-        // --- CURSOS ---
+        /* 3. GESTIÓN DEL CATÁLOGO DE CURSOS */
         async function cargarCursos() {
-            const res = await fetch('/api/cursos?limit=100');
+            const res = await fetch('/api/cursos?limit=1000');
             const data = await res.json();
             const tbody = document.getElementById('tabla-cursos-body');
             
@@ -923,121 +1082,209 @@
                     <td>${c.id}</td>
                     <td><strong>${c.titulo}</strong></td>
                     <td>${c.descripcion}</td>
-                    <td class="col-acciones"> <div class="btn-group">
+                    <td class="col-acciones"> 
+                        <div class="btn-group">
                             <button class="btn btn-modify" onclick='prepararEdicion(${JSON.stringify(c)})'>EDITAR</button>
                             <button class="btn btn-delete" onclick="eliminarCurso(${c.id})">BORRAR</button>
                         </div>
                     </td>
                 </tr>
             `).join('');
+
+            const searchVal = document.getElementById('search-cursos').value;
+            if(searchVal) buscarEnTabla('tabla-cursos-body', searchVal);
         }
-        // --- USUARIOS ---
+
+        function prepararEdicion(curso) {
+            document.getElementById('cur-id').value = curso.id;
+            document.getElementById('cur-titulo').value = curso.titulo;
+            document.getElementById('cur-desc').value = curso.descripcion;
+            document.getElementById('cur-imagen').value = curso.imagen || "";
+
+            document.getElementById('form-title').innerText = "Editar Curso (ID: " + curso.id + ")";
+            document.getElementById('btn-submit-curso').innerText = "Actualizar Curso";
+            document.getElementById('btn-cancelar').style.display = "inline-block";
+            document.getElementById('gestionar-cursos').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetFormulario() {
+            document.getElementById('form-curso').reset();
+            document.getElementById('cur-id').value = "";
+            document.getElementById('btn-cancelar').style.display = "none";
+            document.getElementById('btn-submit-curso').innerText = "Añadir Curso";
+            document.getElementById('form-title').innerText = "Crear Nuevo Curso";
+        }
+
+        document.getElementById('form-curso').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('cur-id').value;
+            const body = { 
+                titulo: document.getElementById('cur-titulo').value, 
+                descripcion: document.getElementById('cur-desc').value,
+                imagen: document.getElementById('cur-imagen').value || ""
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `/api/cursos/${id}` : '/api/cursos';
+            try {
+                const response = await fetch(url, { 
+                    method: method, 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(body) 
+                });
+                if (response.ok) {
+                    alert(id ? "Curso actualizado" : "Curso creado");
+                    resetFormulario(); cargarCursos(); initDashboard();
+                }
+            } catch (error) { console.error(error); }
+        });
+
+        async function eliminarCurso(id) {
+            if(confirm("¿Borrar curso?")) {
+                await fetch(`/api/cursos/${id}`, { method: 'DELETE' });
+                cargarCursos(); initDashboard();
+            }
+        }
+
+        /* 4. GESTIÓN DE USUARIOS Y ROLES */
         async function cargarUsuarios() {
             try {
                 const res = await fetch('/api/users/with-courses');
-                const usuarios = await res.json();
-                
-                const tbodyAlumnos = document.getElementById('tabla-alumnos-body');
-                const tbodyAdmins = document.getElementById('tabla-admins-body');
-                
-                tbodyAlumnos.innerHTML = "";
-                tbodyAdmins.innerHTML = "";
-
-                usuarios.forEach(u => {
-                    const nombreParaMostrar = u.name || "Sin Nombre";
-                    
-                    const rowHtml = `
-                        <tr>
-                            <td>${u.id}</td>
-                            <td><strong>${nombreParaMostrar}</strong></td>
-                            <td>${u.email}</td>
-                            <td class="col-acciones"> <button class="btn btn-delete" onclick="eliminarUsuario(${u.id})">Eliminar</button>
-                            </td>
-                        </tr>
-                    `;
-
-                    if (u.role === 'admin') {
-                        tbodyAdmins.innerHTML += rowHtml;
-                    } else {
-                        tbodyAlumnos.innerHTML += rowHtml;
-                    }
-                });
-
-                if (!tbodyAlumnos.innerHTML) tbodyAlumnos.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay alumnos</td></tr>';
-                if (!tbodyAdmins.innerHTML) tbodyAdmins.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay administradores</td></tr>';
-
+                globalUsuarios = await res.json();
+                filtrarUsuariosGlobal();
             } catch (e) {
-                console.error("Error al cargar las tablas de usuarios:", e);
+                console.error("Error al cargar la tabla unificada de usuarios:", e);
             }
         }
-        async function eliminarUsuario(id) {
-            if (!confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.')) {
+
+        function setFiltroRol(rol) {
+            filtroRolActual = rol;
+            document.querySelectorAll('.role-filter-container .btn-filter').forEach(btn => btn.classList.remove('active'));
+            
+            if (rol === 'TODOS') document.getElementById('filter-all').classList.add('active');
+            if (rol === 'ADMIN') document.getElementById('filter-admin').classList.add('active');
+            if (rol === 'ALUMNO') document.getElementById('filter-alumno').classList.add('active');
+            
+            filtrarUsuariosGlobal();
+        }
+
+        function filtrarUsuariosGlobal() {
+            const query = document.getElementById('search-usuarios-global').value.toLowerCase().trim();
+            const tbody = document.getElementById('tabla-usuarios-unificada-body');
+            tbody.innerHTML = "";
+
+            const usuariosFiltrados = globalUsuarios.filter(u => {
+                const nombre = (u.name || "Sin Nombre").toLowerCase();
+                const email = (u.email || "").toLowerCase();
+                const matchTexto = nombre.includes(query) || email.includes(query);
+                
+                let matchRol = false;
+                if (filtroRolActual === 'TODOS') matchRol = true;
+                else if (filtroRolActual === 'ADMIN' && u.role === 'admin') matchRol = true;
+                else if (filtroRolActual === 'ALUMNO' && u.role === 'user') matchRol = true;
+                
+                return matchTexto && matchRol;
+            });
+
+            if (usuariosFiltrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">No se encontraron usuarios</td></tr>';
                 return;
             }
 
-            try {
-                const response = await fetch(`/api/users/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+            usuariosFiltrados.forEach(u => {
+                const nombreParaMostrar = u.name || "Sin Nombre";
+                const isAdmin = u.role === 'admin';
+                const badgeStyle = isAdmin 
+                    ? "background-color: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;"
+                    : "background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9;";
+                const icon = isAdmin ? "💼" : "🎓";
+                const rolTexto = isAdmin ? "ADMIN" : "ALUMNO";
 
-                const data = await response.json();
+                const botonVerCursos = !isAdmin 
+                    ? `<button class="btn btn-modify" style="width: 100px; padding: 6px 10px;" onclick="verCursosAlumno(${u.id})">Cursos</button>` 
+                    : '';
 
-                if (response.ok) {
-                    alert('Usuario eliminado correctamente');
-                    if (typeof cargarAlumnos === 'function') {
-                        cargarAlumnos();
-                    }
-                } else {
-                    alert('Error: ' + (data.error || 'No se pudo eliminar el usuario'));
-                }
-            } catch (error) {
-                console.error('Error en la petición DELETE:', error);
-                alert('Error de conexión con el servidor');
-            }
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="text-align: center; font-weight: 600;">${u.id}</td>
+                        <td style="text-align: left;"><strong>${nombreParaMostrar}</strong></td>
+                        <td style="text-align: left; white-space: nowrap;">${u.email}</td>
+                        <td style="text-align: center;">
+                            <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; ${badgeStyle}">
+                                ${icon} ${rolTexto}
+                            </span>
+                        </td>
+                        <td class="col-acciones">
+                            <div class="btn-group" style="justify-content: center;">
+                                ${botonVerCursos}
+                                <button class="btn btn-delete" style="width: 100px;" onclick="eliminarUsuario(${u.id})">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
         }
+
         async function crearUsuario(event, role) {
             event.preventDefault();
-
-            const form = event.target;
-            const email = form.querySelector('.user-email').value;
-            const password = form.querySelector('.user-pass').value;
+            let email, password, name;
+            
+            if (role === 'user') {
+                name = document.getElementById('alumno-name').value;
+                email = document.getElementById('alumno-email').value;
+                password = document.getElementById('alumno-pass').value;
+            } else if (role === 'admin') {
+                name = document.getElementById('admin-name').value;
+                email = document.getElementById('admin-email').value;
+                password = document.getElementById('admin-pass').value;
+            }
 
             try {
                 const response = await fetch('/api/users/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, role })
+                    body: JSON.stringify({ name, email, password, role })
                 });
-
-                const data = await response.json();
-
+                
                 if (response.ok) {
                     alert(`${role === 'admin' ? 'Administrador' : 'Alumno'} creado con éxito`);
-                    form.reset();
-                    cargarUsuarios();
-                    if (window.initDashboard) initDashboard();
+                    if (role === 'user') document.getElementById('form-crear-alumno').reset();
+                    if (role === 'admin') document.getElementById('form-crear-admin').reset();
+                    cargarUsuarios();  
+                    initDashboard();   
                 } else {
+                    const data = await response.json();
                     alert("Error: " + data.error);
                 }
-            } catch (error) {
-                console.error("Error en el registro:", error);
-                alert("Error de conexión con el servidor");
+            } catch (error) { 
+                console.error("Error en la petición:", error); 
             }
-
         }
-        // --- INSCRIPCIONES Y BÚSQUEDA ---
+
+        async function eliminarUsuario(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este usuario?')) return;
+            try {
+                const response = await fetch(`/api/users/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    alert('Usuario eliminado correctamente');
+                    cargarUsuarios();
+                } else {
+                    alert('Error al eliminar usuario');
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        /* 5. GESTIÓN DE INSCRIPCIONES Y ASIGNACIÓN */
         async function cargarInscripciones() {
             try {
                 const resU = await fetch('/api/users/with-courses');
                 globalInscripciones = await resU.json();
                 
-                document.getElementById('sel-alumno-ins').innerHTML = globalInscripciones.map(u => 
-                    `<option value="${u.id}">${u.email}</option>`).join('');
+                document.getElementById('sel-alumno-ins').innerHTML = globalInscripciones
+                    .filter(u => u.role === 'user')
+                    .map(u => `<option value="${u.id}">${u.email}</option>`).join('');
 
-                const resC = await fetch('/api/cursos?limit=100');
+                const resC = await fetch('/api/cursos?limit=1000');
                 const dataC = await resC.json();
                 document.getElementById('sel-curso-ins').innerHTML = (dataC.data || []).map(c => 
                     `<option value="${c.id}">${c.titulo}</option>`).join('');
@@ -1050,12 +1297,12 @@
             const valAlumno = document.getElementById('search-alumno').value.toLowerCase();
             const valCurso = document.getElementById('search-curso').value.toLowerCase();
             const tbody = document.getElementById('tabla-inscripciones-body');
-            
             let html = "";
 
             globalInscripciones.forEach(usuario => {
-                if (usuario.courses && usuario.courses.length > 0) {
-                    usuario.courses.forEach(curso => {
+                const cursos = usuario.courses || usuario.cursos || [];
+                if (cursos.length > 0) {
+                    cursos.forEach(curso => {
                         const nombreMostrar = usuario.name || "Sin nombre";
                         const matchEmail = usuario.email.toLowerCase().includes(valAlumno);
                         const matchCurso = curso.titulo.toLowerCase().includes(valCurso);
@@ -1063,10 +1310,13 @@
                         if (matchEmail && matchCurso) {
                             html += `
                                 <tr>
-                                    <td>${nombreMostrar}</td> <td><strong>${usuario.email}</strong></td>
+                                    <td>${nombreMostrar}</td> 
+                                    <td><strong>${usuario.email}</strong></td>
                                     <td><span style="color: var(--primary); font-weight:600;">${curso.titulo}</span></td>
                                     <td class="col-acciones"> 
-                                        <button class="btn btn-delete" onclick="quitarInscripcion(${usuario.id}, ${curso.id})">Dar de Baja</button>
+                                        <div class="col-acciones-container">
+                                            <button class="btn btn-delete" onclick="quitarInscripcion(${usuario.id}, ${curso.id})">Dar de Baja</button>
+                                        </div>
                                     </td>
                                 </tr>
                             `;
@@ -1074,7 +1324,6 @@
                     });
                 }
             });
-
             tbody.innerHTML = html || '<tr><td colspan="4" style="text-align:center;">No se encontraron inscripciones</td></tr>';
         }
 
@@ -1093,8 +1342,7 @@
 
             if(res.ok) { 
                 alert("Inscripción exitosa");
-                cargarInscripciones(); 
-                initDashboard(); 
+                cargarInscripciones(); initDashboard(); 
             } else {
                 alert("Error al inscribir");
             }
@@ -1107,75 +1355,245 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ user_id: uId, course_id: cId })
             });
-            
-            if(res.ok) {
-                cargarInscripciones();
-                initDashboard();
+            if(res.ok) { 
+                cargarInscripciones(); 
+                initDashboard(); 
+                if (document.getElementById('modal-cursos').style.display === 'flex') {
+                    verCursosAlumno(uId);
+                }
             }
         }
 
-        // --- NOTICIAS ---
-        async function cargarNoticias() {
-            try {
-                const res = await fetch('/api/news');
-                const response = await res.json();
-                const noticias = response.data || []; 
-                const tbody = document.getElementById('tabla-noticias-body');
-                
-                tbody.innerHTML = '';
+        /* 6. CONTROL DE MODAL DE CURSOS INDIVIDUALES POR ALUMNO */
+        async function verCursosAlumno(userId) {
+            const usuario = globalUsuarios.find(u => u.id == userId || u.user_id == userId);
+            const lista = document.getElementById("modal-cursos-lista");
+            lista.innerHTML = ""; 
 
-                if (noticias.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay noticias publicadas</td></tr>';
-                    return;
+            if (!usuario) {
+                document.getElementById("modal-cursos-titulo").innerText = `Cursos del Alumno`;
+                lista.innerHTML = `<li style="text-align:center; color: var(--text-muted); padding:1rem;">No se encontraron datos de este usuario.</li>`;
+                document.getElementById("modal-cursos").style.display = "flex";
+                return;
+            }
+
+            const nombreAlumno = usuario.name || usuario.email;
+            document.getElementById("modal-cursos-titulo").innerText = `Cursos de ${nombreAlumno}`;
+            const cursosAlumno = usuario.courses || usuario.cursos || [];
+
+            if (cursosAlumno.length === 0) {
+                lista.innerHTML = `
+                    <div class="no-cursos-container" style="text-align: center; padding: 2rem 1rem; color: #64748b;">
+                        <div class="no-cursos-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">📚❌</div>
+                        <p style="margin: 0; font-weight: 500;">Este alumno no está inscrito en ningún curso todavía.</p>
+                    </div>
+                `;
+                document.getElementById("modal-cursos").style.display = "flex";
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/cursos?limit=100');
+                let todosLosCursos = [];
+                if (response.ok) {
+                    const data = await response.json();
+                    todosLosCursos = Array.isArray(data) ? data : (data.data || data.cursos || []);
                 }
 
-                noticias.forEach(n => {
-                    const fechaYHora = n.fecha ? new Date(n.fecha).toLocaleString() : '---';
-                    const isAviso = n.tipo === 'AVISO';
-                    const badgeStyle = isAviso 
-                        ? "background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b;" 
-                        : "background-color: #dbeafe; color: #1e40af; border: 1px solid #3b82f6;";
-                    const icon = isAviso ? "⚠️" : "📰";
+                cursosAlumno.forEach(cAlumno => {
+                    const idBuscar = cAlumno.course_id || cAlumno.id;
+                    const cursoCompleto = todosLosCursos.find(c => c.id == idBuscar);
+                    const nombreCurso = cAlumno.titulo || (cursoCompleto ? cursoCompleto.titulo : `Curso #${idBuscar}`);
+                    
+                    let srcImagen = (cursoCompleto && cursoCompleto.imagen) ? cursoCompleto.imagen.trim() : "";
+                    if (srcImagen && !srcImagen.startsWith('http') && !srcImagen.startsWith('/')) {
+                        srcImagen = '/' + srcImagen;
+                    }
+                    if (!srcImagen) {
+                        srcImagen = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=200&auto=format&fit=crop";
+                    }
 
-                    const badgeImportante = n.important === 1 
-                        ? `<span style="background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: 800; margin-left: 12px; display: inline-block; vertical-align: middle;">🔥 IMPORTANTE</span>` 
-                        : '';
+                    const li = document.createElement("li");
+                    li.className = "curso-card";
+                    li.style.display = "flex";
+                    li.style.alignItems = "center";
+                    li.style.gap = "1rem";
+                    li.style.padding = "0";
+                    li.style.overflow = "hidden";
 
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${n.id}</td> 
-                        <td>${fechaYHora}</td>
-                        <td>
-                            <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.7em; font-weight: 800; ${badgeStyle}">
-                                ${icon} ${n.tipo}
-                            </span>
-                        </td>
-                        <td>
-                            <strong style="vertical-align: middle;">${n.titulo}</strong>${badgeImportante}
-                        </td>
-                        <td class="col-acciones">
-                            <div class="btn-group">
-                                <button class="btn btn-modify" onclick='prepararEdicionNoticia(${JSON.stringify(n)})'>EDITAR</button>
-                                <button class="btn btn-delete" onclick="eliminarNoticia(${n.id})">BORRAR</button>
-                            </div>
-                        </td>
+                    li.innerHTML = `
+                        <div class="curso-img-container" style="width: 90px; height: 90px; flex-shrink: 0; border-right: 1px solid #e2e8f0;">
+                            <img src="${srcImagen}" alt="${nombreCurso}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=200&auto=format&fit=crop'">
+                        </div>
+                        <div class="curso-info" style="font-weight: 600; color: #1e293b; font-size: 0.95rem; padding: 10px; flex-grow: 1;">
+                            <div>${nombreCurso}</div>
+                            <small style="color: var(--primary); font-weight: 500; display: block; margin-top: 4px;">ID: #${idBuscar}</small>
+                        </div>
+                        <div style="padding-right: 15px;">
+                            <button class="btn btn-delete" style="padding: 6px 12px; font-size: 0.7rem; min-width: auto;" onclick="quitarInscripcion(${usuario.id}, ${idBuscar})">Baja</button>
+                        </div>
                     `;
-                    tbody.appendChild(tr);
+                    lista.appendChild(li);
                 });
+
+            } catch (error) {
+                console.error("Error al procesar el listado de imágenes:", error);
+                cursosAlumno.forEach(cAlumno => {
+                    const idBuscar = cAlumno.course_id || cAlumno.id;
+                    const li = document.createElement("li");
+                    li.className = "curso-card";
+                    li.innerHTML = `
+                        <div class="curso-icon">📖</div>
+                        <div class="curso-info" style="flex-grow: 1;">${cAlumno.titulo || 'Curso'}</div>
+                        <div style="padding-right: 15px;">
+                            <button class="btn btn-delete" style="padding: 6px 12px; font-size: 0.7rem; min-width: auto;" onclick="quitarInscripcion(${usuario.id}, ${idBuscar})">Baja</button>
+                        </div>
+                    `;
+                    lista.appendChild(li);
+                });
+            }
+
+            document.getElementById("modal-cursos").style.display = "flex";
+        }
+
+        function cerrarModalCursos() {
+            document.getElementById('modal-cursos').style.display = 'none';
+        }
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('modal-cursos');
+            if (event.target === modal) {
+                cerrarModalCursos();
+            }
+        });
+
+        /* 7. GESTIÓN DE NOTICIAS Y AVISOS */
+        async function cargarNoticias() {
+            try {
+                const res = await fetch('/api/news?limit=1000');
+                const response = await res.json();
+                globalNoticias = response.data || [];
+
+                actualizarEstilosBotonesTipoNoticias(filtroNoticiasTipo);
+                filtrarNoticias_Main();
             } catch (e) {
-                console.error("Error cargando tabla:", e);
+                console.error("Error cargando tabla de noticias:", e);
             }
         }
+
+        function filtrarNoticiasPorTipo(tipo) {
+            filtroNoticiasTipo = tipo;
+            actualizarEstilosBotonesTipoNoticias(tipo);
+            filtrarNoticias_Main();
+        }
+
+        function actualizarEstilosBotonesTipoNoticias(tipo) {
+            const btnTodos = document.getElementById('btn-news-tipo-todos');
+            const btnNoticia = document.getElementById('btn-news-tipo-noticia');
+            const btnAviso = document.getElementById('btn-news-tipo-aviso');
+
+            if (!btnTodos || !btnNoticia || !btnAviso) return;
+
+            [btnTodos, btnNoticia, btnAviso].forEach(b => {
+                b.style.background = "transparent";
+                b.style.color = "#4a5568";
+            });
+
+            if (tipo === 'TODAS') {
+                btnTodos.style.background = "#0f172a";
+                btnTodos.style.color = "white";
+            } else if (tipo === 'NOTICIA') {
+                btnNoticia.style.background = "#3b82f6";
+                btnNoticia.style.color = "white";
+            } else if (tipo === 'AVISO') {
+                btnAviso.style.background = "#f59e0b";
+                btnAviso.style.color = "white";
+            }
+        }
+
+        function toggleFiltroImportante() {
+            const btn = document.getElementById('filtro-btn-importante');
+            filtroNoticiasImportante = !filtroNoticiasImportante;
+
+            if (filtroNoticiasImportante) {
+                btn.style.backgroundColor = "#fee2e2";
+                btn.style.color = "#b91c1c";
+                btn.style.borderColor = "#fca5a5";
+                btn.innerText = "🔥 SOLO IMPORTANTES";
+            } else {
+                btn.style.backgroundColor = "#e2e8f0";
+                btn.style.color = "#475569";
+                btn.style.borderColor = "#cbd5e1";
+                btn.innerText = "📌 MOSTRAR TODO";
+            }
+            filtrarNoticias_Main();
+        }
+
+        function filtrarNoticias_Main() {
+            const query = document.getElementById('search-noticias').value.toLowerCase().trim();
+            const tbody = document.getElementById('tabla-noticias-body');
+            if(!tbody) return;
+            
+            tbody.innerHTML = '';
+
+            const noticiasFiltradas = globalNoticias.filter(n => {
+                const titulo = (n.titulo || "").toLowerCase();
+                const contenido = (n.contenido || "").toLowerCase();
+                const matchTexto = titulo.includes(query) || contenido.includes(query);
+                const cumpleTipo = (filtroNoticiasTipo === 'TODAS' || n.tipo === filtroNoticiasTipo);
+                const cumpleImportancia = (!filtroNoticiasImportante || n.important === 1);
+
+                return matchTexto && cumpleTipo && cumpleImportancia;
+            });
+
+            if (noticiasFiltradas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">No se encontraron noticias</td></tr>';
+                return;
+            }
+
+            noticiasFiltradas.forEach(n => {
+                const fechaYHora = n.fecha ? new Date(n.fecha).toLocaleString() : '---';
+                const isAviso = n.tipo === 'AVISO';
+                const badgeStyle = isAviso 
+                    ? "background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b;" 
+                    : "background-color: #dbeafe; color: #1e40af; border: 1px solid #3b82f6;";
+                const icon = isAviso ? "⚠️" : "📰";
+
+                const badgeImportante = n.important === 1 
+                    ? `<span style="background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: 800; margin-left: 12px; display: inline-block; vertical-align: middle;">🔥 IMPORTANTE</span>` 
+                    : '';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${n.id}</td> 
+                    <td>${fechaYHora}</td>
+                    <td>
+                        <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.7em; font-weight: 800; ${badgeStyle}">
+                            ${icon} ${n.tipo}
+                        </span>
+                    </td>
+                    <td>
+                        <strong style="vertical-align: middle;">${n.titulo}</strong>${badgeImportante}
+                    </td>
+                    <td class="col-acciones">
+                        <div class="btn-group">
+                            <button class="btn btn-modify" onclick='prepararEdicionNoticia(${JSON.stringify(n)})'>EDITAR</button>
+                            <button class="btn btn-delete" onclick="eliminarNoticia(${n.id})">BORRAR</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         function prepararEdicionNoticia(n) {
             document.getElementById('news-id').value = n.id;
             document.getElementById('news-titulo').value = n.titulo;
             document.getElementById('news-contenido').value = n.contenido;
-            
             setTipo(n.tipo); 
 
             const impInput = document.getElementById('news-important-val');
             impInput.value = n.important;
-            
             const btnImp = document.getElementById('btn-importante');
             if (n.important == 1) {
                 btnImp.style.backgroundColor = "#fee2e2";
@@ -1190,70 +1608,7 @@
             document.getElementById('btn-cancelar-news').style.display = "inline";
             document.getElementById('btn-submit-news').innerText = "Actualizar Noticia";
             document.getElementById('news-form-title').innerText = "Editando Noticia: " + n.id;
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetFormulario() {
-            document.getElementById('form-curso').reset();
-            document.getElementById('cur-id').value = "";
-            document.getElementById('btn-cancelar').style.display = "none";
-            document.getElementById('btn-submit-curso').innerText = "Añadir Curso";
-            document.getElementById('form-title').innerText = "Crear Nuevo Curso";
-        }
-
-        document.getElementById('form-curso').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const id = document.getElementById('cur-id').value;
-            const titulo = document.getElementById('cur-titulo').value;
-            const descripcion = document.getElementById('cur-desc').value;
-            const imagen = document.getElementById('cur-imagen').value;
-            const body = { 
-                titulo: titulo, 
-                descripcion: descripcion,
-                imagen: imagen || ""
-            };
-
-        const method = id ? 'PUT' : 'POST';
-        const url = id ? `/api/cursos/${id}` : '/api/cursos';
-                try {
-                const response = await fetch(url, { 
-                    method: method, 
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }, 
-                    body: JSON.stringify(body) 
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    alert(id ? "Curso actualizado con éxito" : "Curso creado con éxito");
-                    resetFormulario();
-                    await cargarCursos();
-                    await initDashboard();
-                } else {
-                    alert("Error: " + (result.error || "No se pudo guardar el curso"));
-                }
-            } catch (error) {
-                console.error("Error en la petición:", error);
-                alert("Error de conexión con el servidor");
-            }
-        });
-        async function eliminarCurso(id) {
-            if(confirm("¿Borrar curso?")) {
-                await fetch(`/api/cursos/${id}`, { method: 'DELETE' });
-                cargarCursos(); initDashboard();
-            }
-        }
-
-        function prepararEdicionNoticia(n) {
-            document.getElementById('news-id').value = n.id;
-            document.getElementById('news-titulo').value = n.titulo;
-            document.getElementById('news-contenido').value = n.contenido;
-            document.getElementById('btn-cancelar-news').style.display = "inline";
-            window.scrollTo(0,0);
         }
 
         function resetFormNoticia() {
@@ -1263,47 +1618,37 @@
             document.getElementById('btn-submit-news').innerText = "Publicar Noticia";
             document.getElementById('news-form-title').innerText = "Publicar Nueva Noticia";
             
-            const inputImp = document.getElementById('news-important-val');
-            inputImp.value = "0";
+            document.getElementById('news-important-val').value = "0";
             const btnImp = document.getElementById('btn-importante');
             btnImp.style.backgroundColor = "#e2e8f0";
             btnImp.style.color = "#475569";
             btnImp.innerText = "📌 Marcar como Importante";
-            
             setTipo('NOTICIA');
         }
 
         document.getElementById('form-noticia').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const id = document.getElementById('news-id').value;
-            const titulo = document.getElementById('news-titulo').value;
-            const contenido = document.getElementById('news-contenido').value;
-            const tipo = document.getElementById('news-tipo-val').value; 
-            const important = parseInt(document.getElementById('news-important-val').value) || 0;
+            const body = { 
+                titulo: document.getElementById('news-titulo').value, 
+                contenido: document.getElementById('news-contenido').value, 
+                tipo: document.getElementById('news-tipo-val').value, 
+                important: parseInt(document.getElementById('news-important-val').value) || 0 
+            };
 
-            const body = { titulo, contenido, tipo, important };
             const method = id ? 'PUT' : 'POST';
             const url = id ? `/api/news/${id}` : '/api/news';
-
             try {
                 const res = await fetch(url, {
                     method: method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
                 });
-
                 if (res.ok) {
                     alert(id ? "Noticia actualizada" : "Noticia publicada");
-                    resetFormNoticia();
-                    cargarNoticias();
-                } else {
-                    const errData = await res.json();
-                    alert("Error: " + errData.error);
+                    resetFormNoticia(); cargarNoticias();
                 }
-            } catch (error) {
-                console.error("Error en la petición:", error);
-            }
+            } catch (error) { console.error(error); }
         });
 
         async function eliminarNoticia(id) {
@@ -1317,14 +1662,12 @@
             const btnNoticia = document.getElementById('btn-tipo-noticia');
             const btnAviso = document.getElementById('btn-tipo-aviso');
             const inputTipo = document.getElementById('news-tipo-val');
-
             inputTipo.value = tipo;
 
             if (tipo === 'AVISO') {
                 btnAviso.style.borderColor = "#f59e0b";
                 btnAviso.style.backgroundColor = "#fef3c7";
                 btnAviso.style.color = "#92400e";
-                
                 btnNoticia.style.borderColor = "#ddd";
                 btnNoticia.style.backgroundColor = "#f8fafc";
                 btnNoticia.style.color = "#64748b";
@@ -1332,12 +1675,12 @@
                 btnNoticia.style.borderColor = "#3b82f6";
                 btnNoticia.style.backgroundColor = "#dbeafe";
                 btnNoticia.style.color = "#1e40af";
-                
                 btnAviso.style.borderColor = "#ddd";
                 btnAviso.style.backgroundColor = "#f8fafc";
                 btnAviso.style.color = "#64748b";
             }
         }
+
         function toggleImportante() {
             const btn = document.getElementById('btn-importante');
             const input = document.getElementById('news-important-val');
@@ -1354,10 +1697,31 @@
                 btn.innerText = "📌 Marcar como Importante";
             }
         }
-        // --- CERRAR SESIÓN ---
+
+        /* 8. MÉTODOS COMPARTIDOS / AUXILIARES Y CUENTAS DE SESIÓN */
+        function buscarEnTabla(tbodyId, query) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            
+            const rows = tbody.getElementsByTagName('tr');
+            const cleanQuery = query.toLowerCase().trim();
+
+            for (let i = 0; i < rows.length; i++) {
+                if (rows[i].cells.length === 1 && rows[i].cells[0].getAttribute('colspan')) {
+                    continue;
+                }
+                
+                const rowText = rows[i].textContent.toLowerCase();
+                if (rowText.includes(cleanQuery)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+
         async function cerrarSesion() {
             if (!confirm("¿Estás seguro de que quieres cerrar sesión?")) return;
-
             try {
                 const res = await fetch('/api/users/logout', { method: 'POST' });
                 if (res.ok) {
