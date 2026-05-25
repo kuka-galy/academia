@@ -50,4 +50,14 @@ db.run(`
   )
 `);
 
+// TABLA LOGS ADMIN
+db.run(`
+  CREATE TABLE IF NOT EXISTS admin_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    action TEXT NOT NULL,
+    admin_email TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
 module.exports = db;
