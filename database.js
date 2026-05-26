@@ -14,7 +14,8 @@ db.run(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE,
     password TEXT,
-    role TEXT DEFAULT 'user'
+    role TEXT DEFAULT 'user',
+    blocked INTEGER DEFAULT 0
   )
 `);
 
