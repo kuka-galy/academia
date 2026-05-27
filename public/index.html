@@ -487,16 +487,16 @@
         }
 
         #chat-window {
-            width: 350px;
-            height: 500px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            width: clamp(320px, 28vw, 390px);
+            height: clamp(440px, 72vh, 560px);
+            background: linear-gradient(180deg, #ffffff 0%, #ecfff3 100%);
+            border-radius: 28px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
             display: none;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            margin-bottom: 12px;
         }
 
         #chat-window.active { 
@@ -505,112 +505,171 @@
         }
         
         .chat-header { 
-            background: var(--primary); 
-            color: white; 
-            padding: 15px 20px; 
+            position: relative;
+            overflow: hidden;
+            background: #ffffff; 
+            color: #142338; 
+            padding: 18px 20px 12px; 
             display: flex; 
             justify-content: space-between; 
-            align-items: center;
+            align-items: flex-start;
+        }
+
+        .chat-header::before {
+            display: none;
+        }
+
+        .chat-header > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes chatHeaderShine {
+            0%, 35% { left: -70%; }
+            75%, 100% { left: 115%; }
         }
 
         .header-profile-img {
-            width: 45px;
-            height: 45px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            border: 1.5px solid white;
-            object-fit: cover;
+            border: none;
+            object-fit: contain;
+            background: transparent;
+            padding: 0;
+            filter: drop-shadow(0 8px 8px rgba(0,0,0,0.28));
         }
         
         #chat-messages { 
             flex: 1; 
-            padding: 20px; 
+            padding: 0 18px 14px; 
             overflow-y: auto; 
-            background: #f8fafc; 
+            background: radial-gradient(circle at 85% 18%, rgba(187,247,208,0.7), transparent 32%), linear-gradient(180deg, #ffffff 0%, #ecfff3 54%, #ddfae9 100%); 
             display: flex; 
             flex-direction: column; 
             gap: 12px; 
+            scrollbar-color: #a9d8cf transparent;
+            scrollbar-width: thin;
         }
         
         .msg { 
-            padding: 12px 16px; 
-            border-radius: 18px; 
-            font-size: 0.9rem; 
-            max-width: 85%; 
-            line-height: 1.4; 
+            padding: 14px 16px; 
+            border-radius: 16px; 
+            font-size: 0.92rem; 
+            max-width: 90%; 
+            line-height: 1.45; 
+            font-weight: 600;
         }
         .msg-bot { 
             background: white; 
             align-self: flex-start; 
-            border: 1px solid #e2e8f0; 
-            color: #334155; 
-            border-bottom-left-radius: 4px; 
+            border: 1px solid rgba(226, 232, 240, 0.9); 
+            color: #24384d; 
+            border-bottom-left-radius: 8px; 
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
         }
         .msg-user { 
-            background: var(--primary); 
+            background: linear-gradient(135deg, #22b8bd 0%, #1fa4b8 100%); 
             color: white; 
             align-self: flex-end; 
-            border-bottom-right-radius: 4px; 
+            border-bottom-right-radius: 8px; 
+        }
+
+        .chat-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-self: flex-start;
+            max-width: 100%;
+        }
+
+        .chat-option-btn {
+            background: #f1faff;
+            border: 1px solid #bee5fb;
+            color: #1c5c84;
+            padding: 10px 16px;
+            border-radius: 999px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.86rem;
+            line-height: 1.3;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .chat-option-btn:hover {
+            background: #e7f7ff;
+            border-color: #82cef5;
         }
         
         .chat-footer { 
-            padding: 15px; 
-            background: white; 
-            border-top: 1px solid #f1f5f9; 
+            padding: 12px 14px 14px; 
+            background: linear-gradient(180deg, #ecfff3 0%, #dff9ea 100%); 
+            border-top: 1px solid rgba(151, 222, 181, 0.75); 
             display: flex; 
             align-items: center; 
             gap: 10px; 
         }
         .chat-footer input { 
             flex: 1; 
-            border: 1px solid #e2e8f0; 
-            padding: 12px 15px; 
-            border-radius: 12px; 
+            border: 1px solid #bdebcf; 
+            padding: 13px 16px; 
+            border-radius: 18px; 
             outline: none; 
             transition: 0.3s; 
+            font-size: 0.98rem;
+            background: rgba(255,255,255,0.9);
         }
 
         .chat-footer input:focus { 
-            border-color: var(--primary); 
+            border-color: #29aeb8; 
+            box-shadow: 0 0 0 3px rgba(41, 174, 184, 0.12);
         }
         
         .send-btn {
-            background: var(--primary);
+            background: linear-gradient(135deg, #21c1bd 0%, #1998b8 100%);
             border: none;
             color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            min-width: 86px;
+            height: 48px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: 0.3s;
+            font-size: 1rem;
+            font-weight: 900;
+            box-shadow: 0 10px 18px rgba(31, 164, 184, 0.24);
         }
         .send-btn:hover { 
-            background: var(--primary-dark); 
+            background: linear-gradient(135deg, #22d0ca 0%, #168dab 100%); 
             transform: scale(1.05); 
         }
 
         .chat-trigger {
-            width: 75px; 
-            height: 75px; 
-            background: var(--primary); 
+            width: 102px; 
+            height: 102px; 
+            background: transparent; 
             border-radius: 50%;
             display: flex; 
             align-items: center; 
             justify-content: center;
             cursor: pointer; 
-            box-shadow: 0 10px 30px rgba(46,125,50,0.5);
+            box-shadow: none;
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
+            overflow: visible;
+            padding: 0;
+            border: none;
         }
         .chat-trigger:hover { 
-            transform: scale(1.1) rotate(5deg); 
+            transform: translateY(-3px) scale(1.06) rotate(3deg); 
         }
         .chat-trigger img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            filter: drop-shadow(0 14px 10px rgba(15,23,42,0.34)) drop-shadow(0 3px 0 rgba(255,255,255,0.32));
         }
         @media (max-width: 1000px) {
             .hero-container { 
@@ -632,7 +691,7 @@
             }
             #chat-window { 
                 width: calc(100vw - 40px); 
-                bottom: 90px; 
+                height: min(560px, calc(100vh - 150px));
             }
         }
     </style>
@@ -784,29 +843,29 @@
         <div id="chat-window">
             <div class="chat-header">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <img src="assets/img/LogoAsistente.png" class="header-profile-img">
-                    <strong style="font-size: 0.95rem;">Asistente WoW</strong>
+                    <img src="assets/img/icono-chatbot.png" class="header-profile-img">
+                    <div>
+                        <strong style="font-size: 1.25rem; display:block;">Tu asistente virtual</strong>
+                        <span style="font-size: 0.86rem; color:#5f7890; font-weight:700;">Asistente de WoWacademy</span>
+                    </div>
                 </div>
-                <span style="cursor:pointer; font-size:1.5rem;" onclick="toggleChat()">&times;</span>
+                <span style="cursor:pointer; font-size:1.15rem; color:#25445c; background:#f1faff; border:1px solid #d9ecf8; width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center;" onclick="toggleChat()">&times;</span>
             </div>
             
             <div id="chat-messages">
-                <div class="msg msg-bot">¡Hola! Soy tu asistente de WoWacademy. ¿En qué puedo ayudarte?</div>
+                <div class="msg msg-bot">Hola, soy tu asistente de WoWacademy. Puedo ayudarte con cursos, registro, acceso, noticias y contenido de la plataforma.</div>
             </div>
 
             <form id="chatForm" class="chat-footer">
                 <input type="text" id="chatInput" placeholder="Escribe un mensaje..." required>
                 <button type="submit" class="send-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
+                    Enviar
                 </button>
             </form>
         </div>
         
         <div class="chat-trigger" onclick="toggleChat()">
-            <img src="assets/img/LogoAsistente.png" alt="Asistente">
+            <img src="assets/img/icono-chatbot.png" alt="Asistente">
         </div>
     </div>
 
@@ -838,24 +897,56 @@
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chat-messages');
 
+        const chatKnowledge = {
+            loaded: false,
+            items: []
+        };
+
+        const fallbackKnowledge = [
+            {
+                question: "Que es WoWacademy?",
+                answer: "WoWacademy es una plataforma de formacion practica de Win O Win para impulsar tu carrera con cursos, proyectos y certificacion.",
+                keywords: ["wowacademy", "plataforma", "academia", "win", "winowin"]
+            },
+            {
+                question: "Que cursos hay disponibles?",
+                answer: "La plataforma destaca cursos de Desarrollo Web, Diseno & UX, Marketing Digital, Inteligencia Artificial, Negocios, Data Science, Ciberseguridad y Edicion de Video.",
+                keywords: ["curso", "cursos", "catalogo", "formacion", "aprender"]
+            },
+            {
+                question: "Como puedo registrarme?",
+                answer: "Puedes registrarte desde el boton Unete gratis o Empieza gratis hoy. El formulario pide nombre, email, contrasena y aceptar los terminos.",
+                keywords: ["registro", "registrarme", "unirme", "gratis", "cuenta", "alta"]
+            },
+            {
+                question: "Como entro si ya tengo cuenta?",
+                answer: "Pulsa Entrar en la parte superior e introduce tu email y contrasena. Si eres admin iras al panel de administracion; si eres alumno iras a tu area.",
+                keywords: ["entrar", "login", "sesion", "acceder", "cuenta"]
+            },
+            {
+                question: "La formacion es practica?",
+                answer: "Si. La pagina presenta una metodologia orientada a formacion practica, proyectos reales, tutores y aprendizaje con expertos.",
+                keywords: ["practica", "metodologia", "proyectos", "tutores", "expertos"]
+            },
+            {
+                question: "Que empresas o partners aparecen?",
+                answer: "En la plataforma aparecen Microsoft Partner, Google Education, AWS Academy y Win O Win Hub.",
+                keywords: ["partner", "partners", "microsoft", "google", "aws", "hub"]
+            }
+        ];
+
         chatForm.onsubmit = async (e) => {
             e.preventDefault();
-            const mensaje = chatInput.value;
+            const mensaje = chatInput.value.trim();
             if(!mensaje) return;
             appendMessage(mensaje, 'user');
             chatInput.value = '';
 
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mensaje })
-                });
-                const data = await response.json();
-                
-                appendMessage(data.respuesta, 'bot');
-            } catch (error) {
-                appendMessage("Lo siento, hubo un error de conexión.", 'bot');
+            const result = await answerFromPlatform(mensaje);
+            appendMessage(result.answer, 'bot');
+
+            if (result.options.length > 1) {
+                appendOptions(result.options);
             }
         }
 
@@ -870,6 +961,141 @@
             container.scrollTop = container.scrollHeight;
         }
         // --- LÓGICA REGISTRO ---
+        function appendOptions(options) {
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'chat-options';
+
+            options.slice(0, 4).forEach((option) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'chat-option-btn';
+                button.textContent = option.question;
+                button.addEventListener('click', () => {
+                    appendMessage(option.question, 'user');
+                    appendMessage(option.answer, 'bot');
+                });
+                optionsDiv.appendChild(button);
+            });
+
+            chatMessages.appendChild(optionsDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function answerFromPlatform(message) {
+            await loadChatKnowledge();
+            const matches = findChatMatches(message);
+
+            if (matches.length === 0) {
+                return {
+                    answer: "No he encontrado una coincidencia clara en la plataforma. Puedes preguntarme por cursos, registro, acceso, noticias, partners o metodologia.",
+                    options: fallbackKnowledge.slice(0, 4)
+                };
+            }
+
+            if (matches.length === 1) {
+                return { answer: matches[0].answer, options: [] };
+            }
+
+            return {
+                answer: "He encontrado varias opciones relacionadas. Elige la pregunta que mas te interese:",
+                options: matches
+            };
+        }
+
+        async function loadChatKnowledge() {
+            if (chatKnowledge.loaded) return;
+
+            chatKnowledge.items = [
+                ...fallbackKnowledge,
+                ...buildPageKnowledge(),
+                ...await fetchKnowledge('/api/cursos?limit=20', 'curso'),
+                ...await fetchKnowledge('/api/news?limit=20', 'noticia')
+            ];
+            chatKnowledge.loaded = true;
+        }
+
+        function buildPageKnowledge() {
+            const items = [];
+
+            document.querySelectorAll('.cat-card strong').forEach((node) => {
+                const title = cleanText(node.textContent);
+                if (!title) return;
+                items.push({
+                    question: `Que puedo aprender sobre ${title}?`,
+                    answer: `${title} forma parte del catalogo destacado de WoWacademy. Puedes verlo desde el catalogo de cursos para revisar la oferta disponible.`,
+                    keywords: extractKeywords(title)
+                });
+            });
+
+            document.querySelectorAll('.partners a span').forEach((node) => {
+                const title = cleanText(node.textContent);
+                if (!title) return;
+                items.push({
+                    question: `Que relacion tiene WoWacademy con ${title}?`,
+                    answer: `${title} aparece como referencia o partner dentro de la plataforma WoWacademy.`,
+                    keywords: extractKeywords(title)
+                });
+            });
+
+            return items;
+        }
+
+        async function fetchKnowledge(url, type) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) return [];
+
+                const payload = await response.json();
+                const rows = Array.isArray(payload.data) ? payload.data : [];
+
+                return rows.map((row) => {
+                    const title = cleanText(row.titulo || row.title || 'Contenido');
+                    const body = cleanText(row.descripcion || row.contenido || '');
+                    const typeLabel = type === 'curso' ? 'curso' : 'noticia';
+
+                    return {
+                        question: type === 'curso' ? `Que incluye el curso ${title}?` : `Que dice la noticia ${title}?`,
+                        answer: body ? `Esta ${typeLabel} de la plataforma trata sobre: ${body}` : `He encontrado ${typeLabel} en la plataforma: ${title}.`,
+                        keywords: extractKeywords(`${title} ${body} ${typeLabel}`)
+                    };
+                });
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function findChatMatches(message) {
+            const terms = extractKeywords(message);
+            if (terms.length === 0) return [];
+
+            return chatKnowledge.items
+                .map((item) => {
+                    const score = item.keywords.reduce((total, keyword) => total + (terms.includes(keyword) ? 1 : 0), 0);
+                    return { ...item, score };
+                })
+                .filter((item) => item.score > 0)
+                .sort((a, b) => b.score - a.score || a.question.localeCompare(b.question));
+        }
+
+        function cleanText(value) {
+            return String(value || '').replace(/\s+/g, ' ').trim();
+        }
+
+        function extractKeywords(value) {
+            const stopWords = new Set(['para', 'como', 'donde', 'cuando', 'sobre', 'quiero', 'puedo', 'tengo', 'esta', 'este', 'esto', 'todo', 'una', 'uno', 'los', 'las', 'con', 'por', 'que', 'del']);
+            return normalizeText(value)
+                .split(' ')
+                .filter((word) => word.length > 2 && !stopWords.has(word));
+        }
+
+        function normalizeText(value) {
+            return cleanText(value)
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9ñ\s]/g, ' ');
+        }
+
         document.getElementById('regForm').onsubmit = async function(e) {
             e.preventDefault();
             
