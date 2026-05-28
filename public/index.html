@@ -491,17 +491,20 @@
             height: clamp(440px, 72vh, 560px);
             background: linear-gradient(180deg, #ffffff 0%, #ecfff3 100%);
             border-radius: 28px;
-            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18), 0 0 24px rgba(34, 184, 189, 0.08);
             display: none;
             flex-direction: column;
             overflow: hidden;
             border: 1px solid rgba(148, 163, 184, 0.22);
             margin-bottom: 12px;
+            transition: box-shadow 0.28s ease, border-color 0.28s ease;
         }
 
         #chat-window.active { 
             display: flex; 
             animation: fadeInUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border-color: rgba(34, 197, 94, 0.34);
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18), 0 0 28px rgba(34, 197, 94, 0.20), 0 0 42px rgba(34, 184, 189, 0.14);
         }
         
         .chat-header { 
@@ -537,7 +540,13 @@
             object-fit: contain;
             background: transparent;
             padding: 0;
-            filter: drop-shadow(0 8px 8px rgba(0,0,0,0.28));
+            filter: drop-shadow(0 8px 8px rgba(0,0,0,0.28)) drop-shadow(0 0 12px rgba(34, 184, 189, 0.18));
+            transition: transform 0.28s ease, filter 0.28s ease;
+        }
+
+        .header-profile-img:hover {
+            transform: scale(1.06);
+            filter: drop-shadow(0 9px 10px rgba(0,0,0,0.24)) drop-shadow(0 0 18px rgba(34, 197, 94, 0.26));
         }
         
         #chat-messages { 
@@ -567,6 +576,17 @@
             color: #24384d; 
             border-bottom-left-radius: 8px; 
             box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        }
+
+        .msg-typing {
+            color: #527064;
+            font-style: italic;
+            background: rgba(255,255,255,0.86);
+            box-shadow: 0 8px 22px rgba(34, 197, 94, 0.10);
+        }
+
+        .msg-bot.typing-in {
+            border-color: rgba(34, 184, 189, 0.18);
         }
         .msg-user { 
             background: linear-gradient(135deg, #22b8bd 0%, #1fa4b8 100%); 
@@ -600,6 +620,8 @@
         .chat-option-btn:hover {
             background: #e7f7ff;
             border-color: #82cef5;
+            box-shadow: 0 0 16px rgba(34, 184, 189, 0.18);
+            transform: translateY(-1px);
         }
         
         .chat-footer { 
@@ -640,11 +662,13 @@
             transition: 0.3s;
             font-size: 1rem;
             font-weight: 900;
-            box-shadow: 0 10px 18px rgba(31, 164, 184, 0.24);
+            box-shadow: 0 10px 18px rgba(31, 164, 184, 0.24), 0 0 18px rgba(34, 208, 202, 0.18);
+            text-shadow: 0 1px 8px rgba(255,255,255,0.18);
         }
         .send-btn:hover { 
             background: linear-gradient(135deg, #22d0ca 0%, #168dab 100%); 
             transform: scale(1.05); 
+            box-shadow: 0 12px 22px rgba(31, 164, 184, 0.30), 0 0 26px rgba(34, 208, 202, 0.30);
         }
 
         .chat-trigger {
@@ -661,15 +685,24 @@
             overflow: visible;
             padding: 0;
             border: none;
+            filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.24)) drop-shadow(0 0 20px rgba(34, 184, 189, 0.14));
         }
         .chat-trigger:hover { 
             transform: translateY(-3px) scale(1.06) rotate(3deg); 
+            filter: drop-shadow(0 0 18px rgba(34, 197, 94, 0.38)) drop-shadow(0 0 28px rgba(34, 184, 189, 0.28));
+        }
+        #chat-widget.open .chat-trigger {
+            filter: drop-shadow(0 0 22px rgba(34, 197, 94, 0.48)) drop-shadow(0 0 34px rgba(34, 184, 189, 0.34));
         }
         .chat-trigger img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             filter: drop-shadow(0 14px 10px rgba(15,23,42,0.34)) drop-shadow(0 3px 0 rgba(255,255,255,0.32));
+            transition: transform 0.28s ease;
+        }
+        .chat-trigger:hover img {
+            transform: scale(1.04);
         }
         @media (max-width: 1000px) {
             .hero-container { 
@@ -845,7 +878,6 @@
                 <div style="display:flex; align-items:center; gap:10px;">
                     <img src="assets/img/icono-chatbot.png" class="header-profile-img">
                     <div>
-                        <strong style="font-size: 1.25rem; display:block;">Tu asistente virtual</strong>
                         <span style="font-size: 0.86rem; color:#5f7890; font-weight:700;">Asistente de WoWacademy</span>
                     </div>
                 </div>
@@ -891,15 +923,31 @@
         // --- LÓGICA CHAT ---
         function toggleChat() {
             document.getElementById('chat-window').classList.toggle('active');
+            document.getElementById('chat-widget').classList.toggle('open', document.getElementById('chat-window').classList.contains('active'));
         }
 
         const chatForm = document.getElementById('chatForm');
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chat-messages');
+        let activeTypingIndicator = null;
+        let activeTypingInterval = null;
 
         const chatKnowledge = {
             loaded: false,
             items: []
+        };
+
+        const chatState = {
+            awaitingFollowUp: false,
+            awaitingRating: false
+        };
+
+        const conversationalIntents = {
+            greetings: ["hola", "buenas", "buenos dias", "buenas tardes", "buenas noches", "hey"],
+            thanks: ["gracias", "muchas gracias", "gracias por la ayuda", "perfecto gracias", "ok gracias", "vale gracias", "mil gracias"],
+            endConversation: ["no", "no gracias", "nada mas", "por ahora no", "eso es todo", "no tengo mas dudas"],
+            positiveRating: ["si", "claro", "me ha servido", "ha sido util", "perfecto"],
+            negativeRating: ["no", "no me ha servido", "no era lo que buscaba", "no me ayudo", "sigo con dudas"]
         };
 
         const fallbackKnowledge = [
@@ -943,11 +991,7 @@
             chatInput.value = '';
 
             const result = await answerFromPlatform(mensaje);
-            appendMessage(result.answer, 'bot');
-
-            if (result.options.length > 1) {
-                appendOptions(result.options);
-            }
+            await showBotResponse(result);
         }
 
         function appendMessage(texto, emisor) {
@@ -970,9 +1014,9 @@
                 button.type = 'button';
                 button.className = 'chat-option-btn';
                 button.textContent = option.question;
-                button.addEventListener('click', () => {
+                button.addEventListener('click', async () => {
                     appendMessage(option.question, 'user');
-                    appendMessage(option.answer, 'bot');
+                    await showBotResponse({ answer: option.answer, options: [] });
                 });
                 optionsDiv.appendChild(button);
             });
@@ -981,7 +1025,84 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
+        async function showBotResponse(result) {
+            const answers = result.answers || [result.answer];
+
+            try {
+                for (const answer of answers) {
+                    await showTypingIndicator();
+                    removeTypingIndicator();
+                    await appendBotMessageWithTyping(answer);
+                }
+
+                if (result.options.length > 1) {
+                    appendOptions(result.options);
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                appendMessage("No he encontrado una coincidencia clara en la plataforma. Puedes preguntarme por cursos, registro, acceso, noticias, partners o metodologia.", 'bot');
+            }
+        }
+
+        function showTypingIndicator() {
+            removeTypingIndicator();
+
+            activeTypingIndicator = appendMessage("El asistente está escribiendo...", 'bot msg-typing');
+            let dots = 0;
+            activeTypingInterval = setInterval(() => {
+                dots = (dots + 1) % 4;
+                if (activeTypingIndicator) {
+                    activeTypingIndicator.textContent = `El asistente está escribiendo${'.'.repeat(dots || 1)}`;
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 260);
+
+            return new Promise((resolve) => {
+                setTimeout(resolve, 820);
+            });
+        }
+
+        function removeTypingIndicator() {
+            if (activeTypingInterval) {
+                clearInterval(activeTypingInterval);
+                activeTypingInterval = null;
+            }
+
+            document.querySelectorAll('.msg-typing').forEach((indicator) => indicator.remove());
+            activeTypingIndicator = null;
+        }
+
+        function appendBotMessageWithTyping(text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg msg-bot typing-in';
+            chatMessages.appendChild(msgDiv);
+
+            let index = 0;
+            const speed = 6;
+
+            return new Promise((resolve) => {
+                const typeNext = () => {
+                    msgDiv.textContent = text.slice(0, index);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    if (index >= text.length) {
+                        msgDiv.classList.remove('typing-in');
+                        resolve();
+                        return;
+                    }
+
+                    index += 1;
+                    setTimeout(typeNext, speed);
+                };
+
+                typeNext();
+            });
+        }
+
         async function answerFromPlatform(message) {
+            const conversationalAnswer = getConversationalAnswer(message);
+            if (conversationalAnswer) return conversationalAnswer;
+
             await loadChatKnowledge();
             const matches = findChatMatches(message);
 
@@ -1000,6 +1121,70 @@
                 answer: "He encontrado varias opciones relacionadas. Elige la pregunta que mas te interese:",
                 options: matches
             };
+        }
+
+        function getConversationalAnswer(message) {
+            const normalizedMessage = normalizeText(message).trim();
+
+            if (chatState.awaitingRating) {
+                if (matchesIntent(normalizedMessage, conversationalIntents.positiveRating)) {
+                    chatState.awaitingRating = false;
+                    return {
+                        answer: "Me alegro mucho. Gracias por tu valoración.",
+                        options: []
+                    };
+                }
+
+                if (matchesIntent(normalizedMessage, conversationalIntents.negativeRating)) {
+                    chatState.awaitingRating = false;
+                    return {
+                        answer: "Siento que no haya sido suficiente. Puedes reformular tu pregunta o darme más detalles para intentar ayudarte mejor.",
+                        options: []
+                    };
+                }
+
+                chatState.awaitingRating = false;
+            }
+
+            if (chatState.awaitingFollowUp) {
+                if (matchesIntent(normalizedMessage, conversationalIntents.endConversation)) {
+                    chatState.awaitingFollowUp = false;
+                    chatState.awaitingRating = true;
+                    return {
+                        answers: [
+                            "Vale, que tengas un muy buen día. Si necesitas cualquier otra cosa, estaré aquí para ayudarte.",
+                            "Antes de irte, ¿te ha resultado útil la respuesta?"
+                        ],
+                        options: []
+                    };
+                }
+
+                chatState.awaitingFollowUp = false;
+            }
+
+            if (matchesIntent(normalizedMessage, conversationalIntents.greetings)) {
+                chatState.awaitingFollowUp = false;
+                chatState.awaitingRating = false;
+                return {
+                    answer: "Hola, ¿en qué puedo ayudarte?",
+                    options: []
+                };
+            }
+
+            if (matchesIntent(normalizedMessage, conversationalIntents.thanks)) {
+                chatState.awaitingFollowUp = true;
+                chatState.awaitingRating = false;
+                return {
+                    answer: "De nada, me alegro de haberte ayudado. ¿Tienes alguna otra consulta?",
+                    options: []
+                };
+            }
+
+            return null;
+        }
+
+        function matchesIntent(message, examples) {
+            return examples.some((example) => message === normalizeText(example).trim());
         }
 
         async function loadChatKnowledge() {
